@@ -1,2 +1,9 @@
 .idea/
 __pycache__/
+__main.py
+__requirements.txt
+__scripts.py
+__widgets.py
+__ui/
+venv/
+env/
