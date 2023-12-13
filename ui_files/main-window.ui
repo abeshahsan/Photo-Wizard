@@ -26,6 +26,22 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>600</y>
+      <width>93</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="text">
+     <string>Crop</string>
+    </property>
+   </widget>
    <widget class="QGraphicsView" name="canvas">
     <property name="geometry">
      <rect>
@@ -44,6 +60,7 @@
    </widget>
    <zorder>verticalLayoutWidget</zorder>
    <zorder>canvas</zorder>
+   <zorder>pushButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menu_bar">
    <property name="geometry">

@@ -1,13 +1,9 @@
-import sys
-
-from copy import deepcopy
-import numpy as np
 from PyQt6 import uic
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
 from filepaths import Filepaths
-from utilites import ValueProperty
+from utilites import ValueProperty, pixmap_to_numpy, numpy_to_pixmap
 from widgets.crop_rubberband_widget import CropRubberBandWidget
 
 
@@ -20,6 +16,9 @@ class UI_MainWindow(QMainWindow):
         # self.setFixedSize(800, 600)
 
         self.canvas = self.findChild(QGraphicsView, 'canvas')
+        self.crop_button = self.findChild(QPushButton, 'pushButton')
+
+        self.crop_button.clicked.connect(self.update_scene)
 
         self.scene = QGraphicsScene()
         self.canvas.setScene(self.scene)
@@ -52,11 +51,13 @@ class UI_MainWindow(QMainWindow):
         image_file_path = self.choose_file()
 
         self.pixmap = QPixmap(image_file_path)
-        if not self.pixmap.isNull():
+        if self.pixmap is not None and not self.pixmap.isNull():
             self.scale_pixmap()
             self.scene = QGraphicsScene()
             self.scene.addPixmap(self.pixmap)
             self.canvas.setScene(self.scene)
+            array = pixmap_to_numpy(self.pixmap)
+            print(array.shape)
             self.enable_all()
 
     def enable_all(self):
@@ -83,6 +84,20 @@ class UI_MainWindow(QMainWindow):
         if self.pixmap.width() >= self.canvas.width() or self.pixmap.height() >= self.canvas.height():
             self.pixmap = self.pixmap.scaled(int(self.canvas.width() * .99), int(self.canvas.height() * .99),
                                              Qt.AspectRatioMode.KeepAspectRatio)
+
+    def crop_pixmap(self):
+        numpy_array = pixmap_to_numpy(self.pixmap)
+        top, right, bottom, left = self.rubber_band.get_crop_dimensions()
+        numpy_array = numpy_array[top:bottom, left:right]
+        self.pixmap = numpy_to_pixmap(numpy_array)
+        return self.pixmap
+
+    def update_scene(self):
+        self.pixmap = self.crop_pixmap()
+        self.scale_pixmap()
+        self.scene = QGraphicsScene()
+        self.scene.addPixmap(self.pixmap)
+        self.canvas.setScene(self.scene)
 
 
 if __name__ == "__main__":

@@ -1,3 +1,4 @@
+import numpy as np
 from PyQt6.QtCore import QObject, pyqtSignal
 from PyQt6.QtGui import QPixmap, QImage
 
@@ -26,3 +27,17 @@ def cv_image_to_q_pixmap(cv_image):
     q_image = QImage(cv_image.data, width, height, bytes_per_line, QImage.Format.Format_RGB888)
     pixmap = QPixmap.fromImage(q_image)
     return pixmap
+
+
+def pixmap_to_numpy(pixmap):
+    image = pixmap.toImage()
+    width, height = image.width(), image.height()
+    buffer = image.bits().asarray(height * width * 3)
+    return np.array(buffer).reshape((height, width, 3))
+
+
+def numpy_to_pixmap(numpy_array):
+    height, width, channel = numpy_array.shape
+    bytes_per_line = 3 * width  # Assuming 3 channels (RGB)
+    image = QImage(numpy_array.tobytes(), width, height, bytes_per_line, QImage.Format.Format_RGB888)
+    return QPixmap.fromImage(image)
