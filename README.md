@@ -6,14 +6,29 @@ CSE 4552: Computer Graphics and Multimedia Systems
 </span>
 </p>
 
-## Built With
-
-### Frameworks:
-
-## Features
-
 ## Team Members
 
 - [K. M. Abesh Ahsan](https://github.com/abeshahsan)
 - [Anika Farzana](https://github.com/Ani445)
 - [Sayema Amin](https://github.com/SayemaSaj)
+
+## Download packages
+
+To download necessary packages in a virtual environment, run these commands
+
+```
+python -m venv packages
+.\packages\Scripts\activate
+pip install -r requirements.txt
+```
+
+Then to run it:
+```
+python -m main
+```
+
+## Built With
+
+### Frameworks:
+
+## Features
