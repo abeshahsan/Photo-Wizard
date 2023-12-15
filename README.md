@@ -14,11 +14,17 @@ CSE 4552: Computer Graphics and Multimedia Systems
 
 ## Download packages
 
-To download necessary packages in a virtual environment, run these commands
+To create a virtual environment in your project folder:
 
 ```
 python -m venv packages
 .\packages\Scripts\activate
+```
+N.B: To run any python or pip command in your project, you will need to activate the virtual environment
+But if you don't create an virtual environment, install them globally, then you can ignore this part.
+
+To download necessary packages in a virtual environment:
+```
 pip install -r requirements.txt
 ```
 
