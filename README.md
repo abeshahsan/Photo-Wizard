@@ -1,6 +1,6 @@
 <h1 align="center"> Photo-Wizard </h1>
 <p align="center">
-PhotoEditor is a desktop application having some basic features of a photo editor 
+PhotoEditor is a desktop application with some basic features of a photo editor 
 made as the Lab project for <br> <span style="color:green;font-weight:500;font-size:18px"> 
 CSE 4552: Computer Graphics and Multimedia Systems
 </span>
@@ -21,7 +21,7 @@ python -m venv packages
 .\packages\Scripts\activate
 ```
 N.B: To run any python or pip command in your project, you will need to activate the virtual environment
-But if you don't create an virtual environment, install them globally, then you can ignore this part.
+But you can ignore this part if you don't create a virtual environment and install them globally.
 
 To download necessary packages in a virtual environment:
 ```
