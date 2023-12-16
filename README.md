@@ -15,13 +15,16 @@ CSE 4552: Computer Graphics and Multimedia Systems
 ## Download packages
 
 To create a virtual environment in your project folder:
-
 ```
 python -m venv packages
-.\packages\Scripts\activate
 ```
 N.B: To run any python or pip command in your project, you will need to activate the virtual environment
 But you can ignore this part if you don't create a virtual environment and install them globally.
+
+To activate the virtual environment:
+```
+.\packages\Scripts\activate
+```
 
 To download necessary packages in a virtual environment:
 ```
@@ -36,5 +39,8 @@ python -m main
 ## Built With
 
 ### Frameworks:
+
+- PyQT6
+- Numpy
 
 ## Features
