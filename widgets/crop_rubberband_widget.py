@@ -14,8 +14,14 @@ class CropRubberBandWidget(QWidget):
         layout.addWidget(QSizeGrip(self), 0, Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
         layout.addWidget(QSizeGrip(self), 0, Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignBottom)
 
-        self.rubber_band = QRubberBand(QRubberBand.Shape.Rectangle, self)
-        self.rubber_band.setPalette(QPalette(Qt.GlobalColor.red))
+        self.__rubber_band = QRubberBand(QRubberBand.Shape.Rectangle, self)
+        self.__rubber_band.setPalette(QPalette(Qt.GlobalColor.red))
+        self.__rubber_band.setStyleSheet(
+            """
+                         border: 2px solid red;
+                         background-color: rgba(255, 0, 0, 50%);
+                 """
+        )
 
         self.mouse_event_previous_pos = None
         self.mouse_event_new_pos = None
@@ -23,7 +29,7 @@ class CropRubberBandWidget(QWidget):
         self.left, self.right, self.top, self.bottom = 0, 0, 0, 0
 
     def resizeEvent(self, event):
-        self.rubber_band.resize(self.width(), self.height())
+        self.__rubber_band.resize(self.width(), self.height())
         self.update_crop_dimensions()
 
     def mousePressEvent(self, event):
@@ -55,5 +61,5 @@ class CropRubberBandWidget(QWidget):
         return self.top, self.bottom, self.right, self.left
 
     def show(self):
-        self.rubber_band.show()
+        self.__rubber_band.show()
         super().show()

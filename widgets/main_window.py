@@ -5,6 +5,7 @@ from PyQt6.QtWidgets import *
 from filepaths import Filepaths
 from utilites import ValueProperty, pixmap_to_numpy, numpy_to_pixmap
 from widgets.crop_rubberband_widget import CropRubberBandWidget
+from widgets.adjust_widget import UI_AdjustWidget
 
 
 class UI_MainWindow(QMainWindow):
@@ -16,9 +17,11 @@ class UI_MainWindow(QMainWindow):
         # self.setFixedSize(800, 600)
 
         self.canvas = self.findChild(QGraphicsView, 'canvas')
-        self.crop_button = self.findChild(QPushButton, 'pushButton')
+        self.canvas_container = self.findChild(QHBoxLayout, 'canvas_container')
+        self.adjust_widget = self.findChild(QWidget, 'adjust_widget')
 
-        self.crop_button.clicked.connect(self.update_scene)
+        # self.adjust_widget = UI_AdjustWidget(self.adjust_widget)
+        self.canvas_container.addWidget(UI_AdjustWidget(self.adjust_widget))
 
         self.scene = QGraphicsScene()
         self.canvas.setScene(self.scene)
@@ -29,15 +32,6 @@ class UI_MainWindow(QMainWindow):
         self.action_open.triggered.connect(self.open_image)
         self.action_save_as.triggered.connect(self.save_new_file)
         self.action_save.triggered.connect(self.save_file)
-
-        self.rubber_band = CropRubberBandWidget(parent=self.canvas)
-        self.rubber_band.setGeometry(0, 0, 80, 80)
-
-        self.rubber_band.show()
-
-    def resizeEvent(self, event):
-        self.canvas.setFixedWidth(int(self.centralWidget().width() * 0.98))
-        self.canvas.setFixedHeight(int(self.centralWidget().height() * 0.98))
 
     def choose_file(self):
         file_dialogue = QFileDialog(self)

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1058</width>
-    <height>651</height>
+    <width>1059</width>
+    <height>663</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -22,52 +22,39 @@
   <widget class="QWidget" name="central_widget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
+     <horstretch>1</horstretch>
+     <verstretch>1</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>600</y>
-      <width>93</width>
-      <height>28</height>
-     </rect>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="text">
-     <string>Crop</string>
-    </property>
-   </widget>
-   <widget class="QGraphicsView" name="canvas">
-    <property name="geometry">
-     <rect>
-      <x>5</x>
-      <y>11</y>
+      <x>9</x>
+      <y>8</y>
       <width>1041</width>
-      <height>581</height>
+      <height>601</height>
      </rect>
     </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
+    <layout class="QHBoxLayout" name="canvas_container" stretch="0">
+     <item>
+      <widget class="QGraphicsView" name="canvas">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>1</horstretch>
+         <verstretch>1</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </widget>
-   <zorder>verticalLayoutWidget</zorder>
-   <zorder>canvas</zorder>
-   <zorder>pushButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menu_bar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1058</width>
+     <width>1059</width>
      <height>26</height>
     </rect>
    </property>

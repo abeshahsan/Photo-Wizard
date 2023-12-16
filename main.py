@@ -13,6 +13,7 @@ def add_stylesheet_to_app(app):
 
 def main():
     app = QApplication(sys.argv)
+    add_stylesheet_to_app(app)
     _main_window = main_window.UI_MainWindow()
     _main_window.show()
     app.exec()
