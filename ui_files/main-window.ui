@@ -22,32 +22,73 @@
   <widget class="QWidget" name="central_widget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
+     <horstretch>1</horstretch>
+     <verstretch>1</verstretch>
     </sizepolicy>
    </property>
-   <widget class="QWidget" name="horizontalLayoutWidget">
+   <property name="minimumSize">
+    <size>
+     <width>1059</width>
+     <height>612</height>
+    </size>
+   </property>
+   <widget class="QWidget" name="verticalLayoutWidget">
     <property name="geometry">
      <rect>
       <x>9</x>
-      <y>8</y>
+      <y>9</y>
       <width>1041</width>
       <height>601</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="editor_container" stretch="0">
-     <property name="spacing">
-      <number>0</number>
+    <layout class="QVBoxLayout" name="main_container_2" stretch="0,1">
+     <property name="sizeConstraint">
+      <enum>QLayout::SetNoConstraint</enum>
      </property>
      <item>
-      <widget class="QGraphicsView" name="canvas">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>1</horstretch>
-         <verstretch>1</verstretch>
-        </sizepolicy>
+      <layout class="QHBoxLayout" name="edit_toolbar" stretch="1,0">
+       <property name="spacing">
+        <number>0</number>
        </property>
-      </widget>
+       <property name="sizeConstraint">
+        <enum>QLayout::SetNoConstraint</enum>
+       </property>
+       <item>
+        <widget class="QWidget" name="horizontalWidget_3" native="true">
+         <layout class="QHBoxLayout" name="horizontalLayout"/>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="button_photo_edit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Edit</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="editor_container" stretch="0">
+       <property name="sizeConstraint">
+        <enum>QLayout::SetDefaultConstraint</enum>
+       </property>
+       <item>
+        <widget class="QGraphicsView" name="canvas">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </widget>

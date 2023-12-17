@@ -17,11 +17,11 @@ class UI_MainWindow(QMainWindow):
         # self.setFixedSize(800, 600)
 
         self.canvas = self.findChild(QGraphicsView, 'canvas')
-        self.canvas_container = self.findChild(QHBoxLayout, 'editor_container')
+        self.editor_container = self.findChild(QHBoxLayout, 'editor_container')
 
         self.adjust_widget = UI_AdjustWidget()
 
-        self.canvas_container.addWidget(self.adjust_widget.main_widget)
+        self.editor_container.addWidget(self.adjust_widget.main_widget)
 
         self.scene = QGraphicsScene()
         self.canvas.setScene(self.scene)

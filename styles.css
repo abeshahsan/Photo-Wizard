@@ -10,3 +10,11 @@ QRubberBand {
     border: 2px solid red;
     background-color: red;
 }
+
+#button_photo_edit {
+    /*border: 1px solid #bdbbbb;*/
+    background-color: #96bafa;
+    border-radius: 20px;
+    padding: 5px 5px;
+    color: black;
+}
