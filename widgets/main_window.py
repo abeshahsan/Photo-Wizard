@@ -11,6 +11,7 @@ from widgets.adjust_widget import UI_AdjustWidget
 class UI_MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.adjust_widget = None
         self.save_file_path = None
         uic.loadUi(Filepaths.MAIN_WINDOW(), self)
         self.setWindowTitle('Photo Wizard')
@@ -18,10 +19,7 @@ class UI_MainWindow(QMainWindow):
 
         self.canvas = self.findChild(QGraphicsView, 'canvas')
         self.editor_container = self.findChild(QHBoxLayout, 'editor_container')
-
-        self.adjust_widget = UI_AdjustWidget()
-
-        self.editor_container.addWidget(self.adjust_widget.main_widget)
+        self.edit_button = self.findChild(QPushButton, 'button_photo_edit')
 
         self.scene = QGraphicsScene()
         self.canvas.setScene(self.scene)
@@ -30,6 +28,7 @@ class UI_MainWindow(QMainWindow):
         self.action_open.triggered.connect(self.open_image)
         self.action_save_as.triggered.connect(self.save_new_file)
         self.action_save.triggered.connect(self.save_file)
+        self.edit_button.clicked.connect(self.load_adjust_widget)
 
     def choose_file(self):
         file_dialogue = QFileDialog(self)
@@ -89,6 +88,12 @@ class UI_MainWindow(QMainWindow):
         self.scene = QGraphicsScene()
         self.scene.addPixmap(self.pixmap)
         self.canvas.setScene(self.scene)
+
+    def load_adjust_widget(self):
+        if self.adjust_widget is None:
+            self.adjust_widget = UI_AdjustWidget()
+            self.editor_container.addWidget(self.adjust_widget.main_widget)
+            self.editor_container.setStretch(0, 1)
 
 
 if __name__ == "__main__":
