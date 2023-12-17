@@ -17,18 +17,16 @@ class UI_MainWindow(QMainWindow):
         # self.setFixedSize(800, 600)
 
         self.canvas = self.findChild(QGraphicsView, 'canvas')
-        self.canvas_container = self.findChild(QHBoxLayout, 'canvas_container')
-        self.adjust_widget = self.findChild(QWidget, 'adjust_widget')
+        self.canvas_container = self.findChild(QHBoxLayout, 'editor_container')
 
-        # self.adjust_widget = UI_AdjustWidget(self.adjust_widget)
-        self.canvas_container.addWidget(UI_AdjustWidget(self.adjust_widget))
+        self.adjust_widget = UI_AdjustWidget()
+
+        self.canvas_container.addWidget(self.adjust_widget.main_widget)
 
         self.scene = QGraphicsScene()
         self.canvas.setScene(self.scene)
         self.pixmap = None
 
-        self.canvas_empty = ValueProperty(True)
-        self.canvas_empty.valueChanged.connect(self.enable_all)
         self.action_open.triggered.connect(self.open_image)
         self.action_save_as.triggered.connect(self.save_new_file)
         self.action_save.triggered.connect(self.save_file)
@@ -51,7 +49,6 @@ class UI_MainWindow(QMainWindow):
             self.scene.addPixmap(self.pixmap)
             self.canvas.setScene(self.scene)
             array = pixmap_to_numpy(self.pixmap)
-            print(array.shape)
             self.enable_all()
 
     def enable_all(self):

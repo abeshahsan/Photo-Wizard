@@ -22,8 +22,8 @@
   <widget class="QWidget" name="central_widget">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-     <horstretch>1</horstretch>
-     <verstretch>1</verstretch>
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
     </sizepolicy>
    </property>
    <widget class="QWidget" name="horizontalLayoutWidget">
@@ -35,7 +35,10 @@
       <height>601</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="canvas_container" stretch="0">
+    <layout class="QHBoxLayout" name="editor_container" stretch="0">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QGraphicsView" name="canvas">
        <property name="sizePolicy">

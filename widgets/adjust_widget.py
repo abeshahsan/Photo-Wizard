@@ -1,16 +1,15 @@
 from PyQt6 import uic
-from PyQt6.QtGui import *
-from PyQt6.QtCore import *
 from PyQt6.QtWidgets import *
+
 from filepaths import Filepaths
-from utilites import ValueProperty, pixmap_to_numpy, numpy_to_pixmap
-from widgets.crop_rubberband_widget import CropRubberBandWidget
 
 
 class UI_AdjustWidget(QWidget):
-    def __init__(self, parent):
-        super(UI_AdjustWidget, self).__init__(parent)
+    def __init__(self):
+        super(UI_AdjustWidget, self).__init__()
         uic.loadUi(Filepaths.ADJUST_WIDGET(), self)
+
+        self.main_widget = self.findChild(QWidget, "main_widget")
 
 
 if __name__ == "__main__":
