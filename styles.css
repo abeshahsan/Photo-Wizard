@@ -25,3 +25,9 @@ QRubberBand {
     border: 1px solid #4fa5f8;
     background-color: #4fa5f8;
 }
+
+#blur_container {
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: blue;
+}

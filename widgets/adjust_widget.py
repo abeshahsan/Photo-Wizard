@@ -10,6 +10,7 @@ class UI_AdjustWidget(QWidget):
         uic.loadUi(Filepaths.ADJUST_WIDGET(), self)
 
         self.main_widget = self.findChild(QWidget, "main_widget")
+        self.blur_slider = self.findChild(QWidget, "blur_slider")
 
 
 if __name__ == "__main__":

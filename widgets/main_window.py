@@ -24,11 +24,10 @@ class UI_MainWindow(QMainWindow):
         self.editor_container = self.findChild(QHBoxLayout, 'editor_container')
         self.cancel_button = self.findChild(QPushButton, 'cancel_button')
 
+        """Some necessary variables needed for canvas. Initializing with None now. will need later."""
         self.scene = QGraphicsScene()
         self.canvas.setScene(self.scene)
-
-        """Some necessary variables needed for canvas. Initializing with None now. will need later."""
-        self.adjust_widget = None
+        self.adjust_widget = UI_AdjustWidget()
         self.save_file_path = None
         self.pixmap = None
         self.original_image = None
@@ -37,10 +36,13 @@ class UI_MainWindow(QMainWindow):
 
         self.load_adjust_widget()
 
+        self.canvas.setFixedSize(800, (self.height() * 85) // 100)
+
         """Some event handlers needed for different operations."""
         self.action_open.triggered.connect(self.open_image)
         self.action_save_as.triggered.connect(self.save_new_file)
         self.action_save.triggered.connect(self.save_file)
+        self.adjust_widget.blur_slider.valueChanged.connect(self.blur)
         # self.cancel_button.clicked.connect(self.load_adjust_widget)
 
     def choose_file(self):
@@ -132,14 +134,13 @@ class UI_MainWindow(QMainWindow):
         self.canvas.setScene(self.scene)
 
     def load_adjust_widget(self):
-        if self.adjust_widget is None:
-            self.adjust_widget = UI_AdjustWidget()
-            self.editor_container.addWidget(self.adjust_widget.main_widget)
-            self.editor_container.setStretch(0, 1)
+        self.adjust_widget = UI_AdjustWidget()
+        self.editor_container.addWidget(self.adjust_widget.main_widget)
+        self.editor_container.setStretch(0, 1)
 
     def load_crop_rubberband(self):
         self.crop_rubber_band = CropRubberBandWidget(self.canvas)
-        self.crop_rubber_band.setGeometry(0, 0, self.width(), self.height())
+        self.crop_rubber_band.setGeometry(0, 0, self.canvas.width(), self.canvas.height())
         self.crop_rubber_band.show()
 
     def blur(self):
