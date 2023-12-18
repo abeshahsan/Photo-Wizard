@@ -11,16 +11,17 @@ QRubberBand {
     background-color: red;
 }
 
-#button_photo_edit {
-    border: 2px solid transparent;
-    background-color: #adc9fa;
-    border-radius: 10px;
+#cancel_button {
+    border: 1px solid #4fa5f8;
+    background-color: #adcef8;
+    border-radius: 5px;
     padding: 3px 3px;
     color: black;
-    width: 40px;
+    min-width: 40px;
     font-size: 14px;
 }
 
-#button_photo_edit:hover {
-    border: 2px solid #adcafc;
+#cancel_button:hover {
+    border: 1px solid #4fa5f8;
+    background-color: #4fa5f8;
 }

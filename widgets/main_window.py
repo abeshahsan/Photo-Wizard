@@ -17,18 +17,21 @@ class UI_MainWindow(QMainWindow):
         self.setWindowTitle('Photo Wizard')
         # self.setFixedSize(800, 600)
 
+        """The canvas is to hold the image to be shown on the screen."""
         self.canvas = self.findChild(QGraphicsView, 'canvas')
         self.editor_container = self.findChild(QHBoxLayout, 'editor_container')
-        self.edit_button = self.findChild(QPushButton, 'button_photo_edit')
+        self.cancel_button = self.findChild(QPushButton, 'cancel_button')
 
         self.scene = QGraphicsScene()
         self.canvas.setScene(self.scene)
         self.pixmap = None
 
+        self.load_adjust_widget()
+
         self.action_open.triggered.connect(self.open_image)
         self.action_save_as.triggered.connect(self.save_new_file)
         self.action_save.triggered.connect(self.save_file)
-        self.edit_button.clicked.connect(self.load_adjust_widget)
+        # self.cancel_button.clicked.connect(self.load_adjust_widget)
 
     def choose_file(self):
         file_dialogue = QFileDialog(self)
@@ -47,7 +50,6 @@ class UI_MainWindow(QMainWindow):
             self.scene = QGraphicsScene()
             self.scene.addPixmap(self.pixmap)
             self.canvas.setScene(self.scene)
-            array = pixmap_to_numpy(self.pixmap)
             self.enable_all()
 
     def enable_all(self):
@@ -57,6 +59,12 @@ class UI_MainWindow(QMainWindow):
         # self.rotate_button.setEnabled(True)
 
     def save_new_file(self):
+        """
+        Clicking 'Save as' or pressing Ctrl+Shift+S \n
+        If you want to save the image file for the first time, you need to create a file. \n
+        So a file-dialogue will open to get the directory and the filename.
+        :return:
+        """
         file_dialogue = QFileDialog()
         filters = "Images (*.jpg *.png *.bmp)"
         file_path, _ = file_dialogue.getSaveFileName(filter=filters)
@@ -65,15 +73,26 @@ class UI_MainWindow(QMainWindow):
             self.pixmap.save(file_path)
 
     def save_file(self):
+        """
+        Clicking 'Save' or pressing Ctrl+S \n
+        Save the file, when the save-file already exists/created,
+        :return:
+        """
         if self.save_file_path:
             self.pixmap.save(self.save_file_path)
-        else:
+        else:  # If the save-file is not created, call save_new_file()
             self.save_new_file()
 
     def scale_pixmap(self):
+        """
+        If the original image is bigger than the canvas, scale it down to fit. \n
+        But if it is smaller or equal, keep it as it is.
+        :return:
+        """
         if self.pixmap.width() >= self.canvas.width() or self.pixmap.height() >= self.canvas.height():
             self.pixmap = self.pixmap.scaled(int(self.canvas.width() * .99), int(self.canvas.height() * .99),
-                                             Qt.AspectRatioMode.KeepAspectRatio)
+                                             Qt.AspectRatioMode.KeepAspectRatio,
+                                             Qt.TransformationMode.SmoothTransformation)
 
     def crop_pixmap(self):
         numpy_array = pixmap_to_numpy(self.pixmap)
@@ -94,6 +113,11 @@ class UI_MainWindow(QMainWindow):
             self.adjust_widget = UI_AdjustWidget()
             self.editor_container.addWidget(self.adjust_widget.main_widget)
             self.editor_container.setStretch(0, 1)
+
+    def load_crop_rubberband(self):
+        self.crop_rubber_band = CropRubberBandWidget(self.canvas)
+        self.crop_rubber_band.setGeometry(0, 0, self.width(), self.height())
+        self.crop_rubber_band.show()
 
 
 if __name__ == "__main__":
