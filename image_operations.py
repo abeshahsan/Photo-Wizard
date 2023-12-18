@@ -36,7 +36,7 @@ def numpy_to_q_image(numpy_array):
 
 def crop_image(q_image, top, bottom, right, left):
     """
-    Crops an image (PyQT6 QImage object) and returns a copy of the cropped image. Does not affect the original image.
+    Crops an image (PyQT6 QImage object) and returns a copy of the cropped image. Does not affect the original image. \n
     The function converts it into a numpy array and crops it according to:
         - start and end rows
         - start and end columns
@@ -54,7 +54,7 @@ def crop_image(q_image, top, bottom, right, left):
 
 def blur_image(q_image):
     """
-    Blurs an image (PyQT6 QImage object) and returns a copy of the blurred image. Does not affect the original.
+    Blurs an image (PyQT6 QImage object) and returns a copy of the blurred image. Does not affect the original.\n
     It converts it into a numpy array and performs some blurring operations.
     :param q_image: QImage object
     :return: a copy of the blurred image
@@ -102,7 +102,7 @@ def blur_image(q_image):
 
 def sharpen_image(q_image):
     """
-    Sharpens an image (PyQT6 QImage object) and returns a copy of the sharpened image. Does not affect the original.
+    Sharpens an image (PyQT6 QImage object) and returns a copy of the sharpened image. Does not affect the original.\n
     It converts it into a numpy array and performs some sharpening operations.
     :param q_image: QImage object
     :return: a copy of the sharpened image
