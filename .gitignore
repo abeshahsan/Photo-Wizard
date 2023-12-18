@@ -4,4 +4,4 @@ venv/
 /env
 packages/
 
-image_controller.py
+canvas_controller.py

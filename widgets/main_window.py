@@ -9,6 +9,7 @@ from utilites import ValueProperty, pixmap_to_numpy, numpy_to_pixmap
 from widgets.crop_rubberband_widget import CropRubberBandWidget
 from widgets.adjust_widget import UI_AdjustWidget
 import image_operations
+from canvas_controller import CanvasController
 
 
 class UI_MainWindow(QMainWindow):
@@ -27,13 +28,13 @@ class UI_MainWindow(QMainWindow):
         """Some necessary variables needed for canvas. Initializing with None now. will need later."""
         self.scene = QGraphicsScene()
         self.canvas.setScene(self.scene)
-        self.adjust_widget = UI_AdjustWidget()
+        self.adjust_widget = UI_AdjustWidget(None)
         self.save_file_path = None
         self.pixmap = None
-        self.original_image = None
-        self.scene_image = None
         self.crop_rubber_band = None
 
+        """create a CanvasController to store all the elements related to the canvas."""
+        self.canvas_controller = CanvasController()
         self.load_adjust_widget()
 
         self.canvas.setFixedSize(800, (self.height() * 85) // 100)
@@ -42,7 +43,7 @@ class UI_MainWindow(QMainWindow):
         self.action_open.triggered.connect(self.open_image)
         self.action_save_as.triggered.connect(self.save_new_file)
         self.action_save.triggered.connect(self.save_file)
-        self.adjust_widget.blur_slider.valueChanged.connect(self.blur)
+        self.canvas_controller.scene_image_updated.valueChanged.connect(self.update_canvas)
         # self.cancel_button.clicked.connect(self.load_adjust_widget)
 
     def choose_file(self):
@@ -68,14 +69,10 @@ class UI_MainWindow(QMainWindow):
         image_file_path = self.choose_file()
 
         self.pixmap = QPixmap(image_file_path)
-        self.original_image = self.pixmap.toImage().copy()
-        self.scene_image = self.original_image.copy()
+        self.canvas_controller.original_image = self.pixmap.toImage().copy()
+        self.canvas_controller.scene_image = self.canvas_controller.original_image.copy()
         if self.pixmap is not None and not self.pixmap.isNull():
-            self.scale_pixmap()
-            self.scene = QGraphicsScene()
-            self.scene.addPixmap(self.pixmap)
-            self.canvas.setScene(self.scene)
-            self.enable_all()
+            self.update_canvas()
 
     def enable_all(self):
         self.action_save_as.setEnabled(True)
@@ -121,20 +118,23 @@ class UI_MainWindow(QMainWindow):
 
     def crop_pixmap(self):
         numpy_array = pixmap_to_numpy(self.pixmap)
-        top, right, bottom, left = self.rubber_band.get_crop_dimensions()
+        top, right, bottom, left = self.crop_rubber_band.get_crop_dimensions()
         numpy_array = numpy_array[top:bottom, left:right]
         self.pixmap = numpy_to_pixmap(numpy_array)
         return self.pixmap
 
-    def update_scene(self):
-        self.pixmap = QPixmap(self.scene_image)
+    def update_canvas(self):
+        if not self.canvas_controller.scene_image_updated:
+            return
+        self.pixmap = QPixmap(self.canvas_controller.scene_image)
         self.scale_pixmap()
         self.scene = QGraphicsScene()
         self.scene.addPixmap(self.pixmap)
         self.canvas.setScene(self.scene)
+        self.canvas_controller.scene_image_updated.value = False
 
     def load_adjust_widget(self):
-        self.adjust_widget = UI_AdjustWidget()
+        self.adjust_widget = UI_AdjustWidget(self.canvas_controller)
         self.editor_container.addWidget(self.adjust_widget.main_widget)
         self.editor_container.setStretch(0, 1)
 
@@ -142,10 +142,6 @@ class UI_MainWindow(QMainWindow):
         self.crop_rubber_band = CropRubberBandWidget(self.canvas)
         self.crop_rubber_band.setGeometry(0, 0, self.canvas.width(), self.canvas.height())
         self.crop_rubber_band.show()
-
-    def blur(self):
-        self.scene_image = image_operations.blur_image(self.original_image)
-        self.update_scene()
 
 
 if __name__ == "__main__":
