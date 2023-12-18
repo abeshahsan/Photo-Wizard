@@ -33,7 +33,42 @@ def crop_image(q_image, left, top, right, bottom):
 def blur_image(q_image):
     numpy_array = q_image_to_numpy(q_image)
 
-    new_image = numpy_to_q_image(numpy_array)
+    height, width, _ = numpy_array.shape
+    new_image = np.zeros_like(numpy_array, dtype=np.float32)
+
+    radius = 5
+    sigma = max(radius / 2.0, 1.0)
+    kernel_width = int(2 * radius) + 1
+
+    kernel = np.zeros((kernel_width, kernel_width))
+    kernel_sum = 0.0
+
+    for x in range(-radius, radius + 1):
+        for y in range(-radius, radius + 1):
+            exponent_numerator = -(x * x + y * y)
+            exponent_denominator = 2.0 * sigma * sigma
+
+            e_expression = np.exp(exponent_numerator / exponent_denominator)
+            kernel_value = e_expression / (2.0 * np.pi * sigma * sigma)
+
+            kernel[x + radius, y + radius] = kernel_value
+            kernel_sum += kernel_value
+
+    kernel /= kernel_sum
+
+    for x in range(radius, height - radius):
+        for y in range(radius, width - radius):
+            for c in range(3):
+                value = 0.0
+                for kernel_x in range(-radius, radius + 1):
+                    for kernel_y in range(-radius, radius + 1):
+                        kernel_value = kernel[kernel_x + radius, kernel_y + radius]
+                        value += numpy_array[x - kernel_x, y - kernel_y, c] * kernel_value
+
+                new_image[x, y, c] = value
+
+    new_image = new_image.astype(np.uint8)
+    new_image = numpy_to_q_image(new_image)
     return new_image  # change the statement
 
 
@@ -48,7 +83,7 @@ if __name__ == '__main__':
     scene = QGraphicsScene()
 
     # Load the image
-    image_path = "Kena.png"
+    image_path = "hoi.jpg"
     image = QImage(image_path)
     blurred_image = blur_image(image)
     pixmap = QPixmap(blurred_image)
