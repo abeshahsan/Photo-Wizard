@@ -17,7 +17,7 @@ class UI_AdjustWidget(QWidget):
         self.blur_slider.valueChanged.connect(self.blur)
 
     def blur(self):
-        self.canvas_controller.scene_image = image_operations.blur_image(self.canvas_controller.original_image)
+        self.canvas_controller.scene_image = image_operations.blur(self.canvas_controller.original_image)
         self.canvas_controller.scene_image_updated.value = True
 
 

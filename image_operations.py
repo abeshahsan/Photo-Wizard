@@ -34,7 +34,7 @@ def numpy_to_q_image(numpy_array):
     return q_img.copy()  # Return a copy to prevent memory issues
 
 
-def crop_image(q_image, top, bottom, right, left):
+def crop(q_image, top, bottom, right, left):
     """
     Crops an image (PyQT6 QImage object) and returns a copy of the cropped image. Does not affect the original image. \n
     The function converts it into a numpy array and crops it according to:
@@ -52,7 +52,7 @@ def crop_image(q_image, top, bottom, right, left):
     return QImage()  # change the statement
 
 
-def blur_image(q_image):
+def blur(q_image):
     """
     Blurs an image (PyQT6 QImage object) and returns a copy of the blurred image. Does not affect the original.\n
     It converts it into a numpy array and performs some blurring operations.
@@ -100,7 +100,7 @@ def blur_image(q_image):
     return new_image  # change the statement
 
 
-def sharpen_image(q_image):
+def sharpen(q_image):
     """
     Sharpens an image (PyQT6 QImage object) and returns a copy of the sharpened image. Does not affect the original.\n
     It converts it into a numpy array and performs some sharpening operations.
@@ -109,7 +109,72 @@ def sharpen_image(q_image):
     """
     # crop the image and return a NEW image.
     # don't change the passed one
-    return QImage()  # change the statement
+    return q_image  # change the statement
+
+
+def change_brightness(q_image):
+    """
+    Changes the brightness of an image (PyQT6 QImage object) and returns a copy of the image.
+    Does not affect the original.\n
+    It converts it into a numpy array and performs some brightness operations.
+    :param q_image: QImage object
+    :return: a copy of the image with changed brightness
+    """
+    # increase the brightness of the image and return a NEW image.
+    # don't change the passed one
+    return q_image  # change the statement
+
+
+def change_contrast(q_image):
+    """
+    Changes the brightness of an image (PyQT6 QImage object) and returns a copy of the image.
+    Does not affect the original.\n
+    It converts it into a numpy array and performs some contrast operations.
+    :param q_image: QImage object
+    :return: a copy of the image with changed contrast
+    """
+    # increase the contrast of the image and return a NEW image.
+    # don't change the passed one
+    return q_image  # change the statement
+
+
+def change_saturation(q_image):
+    """
+    Changes the saturation of an image (PyQT6 QImage object) and returns a copy of the image.
+    Does not affect the original.\n
+    It converts it into a numpy array and performs some saturation operations.
+    :param q_image: QImage object
+    :return: a copy of the image with changed saturation
+    """
+    # increase the saturation of the image and return a NEW image.
+    # don't change the passed one
+    return q_image  # change the statement
+
+
+def change_exposure(q_image):
+    """
+    Changes the exposure of an image (PyQT6 QImage object) and returns a copy of the image.
+    Does not affect the original.\n
+    It converts it into a numpy array and performs some exposure operations.
+    :param q_image: QImage object
+    :return: a copy of the image with changed exposure
+    """
+    # increase the exposure of the image and return a NEW image.
+    # don't change the passed one
+    return q_image  # change the statement
+
+
+def change_warmth(q_image):
+    """
+    Changes the warmth of an image (PyQT6 QImage object) and returns a copy of the image.
+    Does not affect the original.\n
+    It converts it into a numpy array and performs some warmth operations.
+    :param q_image: QImage object
+    :return: a copy of the image with changed warmth
+    """
+    # increase the warmth of the image and return a NEW image.
+    # don't change the passed one
+    return q_image  # change the statement
 
 
 """
@@ -122,7 +187,7 @@ if __name__ == '__main__':
     # Load the image
     image_path = "hoi.jpg"
     image = QImage(image_path)
-    blurred_image = blur_image(image)
+    blurred_image = blur(image)
     pixmap = QPixmap(blurred_image)
 
     # Check if the image was loaded successfully
