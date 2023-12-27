@@ -86,14 +86,11 @@ def blur(q_image):
 
     for x in range(radius, height - radius):
         for y in range(radius, width - radius):
-            for c in range(3):
-                value = 0.0
-                for kernel_x in range(-radius, radius + 1):
-                    for kernel_y in range(-radius, radius + 1):
-                        kernel_value = kernel[kernel_x + radius, kernel_y + radius]
-                        value += numpy_array[x - kernel_x, y - kernel_y, c] * kernel_value
+            # Extract the region of interest from the input image
+            region = numpy_array[x - radius:x + radius + 1, y - radius:y + radius + 1, :]
 
-                new_image[x, y, c] = value
+            # Perform element-wise multiplication with the kernel and sum the result along both axes
+            new_image[x, y, :] = np.sum(region * kernel[:, :, np.newaxis], axis=(0, 1))
 
     new_image = new_image.astype(np.uint8)
     new_image = numpy_to_q_image(new_image)
@@ -185,7 +182,7 @@ if __name__ == '__main__':
     scene = QGraphicsScene()
 
     # Load the image
-    image_path = "hoi.jpg"
+    image_path = "C:/Users/Dell/Pictures/bg.jpg"
     image = QImage(image_path)
     blurred_image = blur(image)
     pixmap = QPixmap(blurred_image)
