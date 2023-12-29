@@ -99,14 +99,35 @@ def blur(q_image):
 
 def sharpen(q_image):
     """
-    Sharpens an image (PyQT6 QImage object) and returns a copy of the sharpened image. Does not affect the original.\n
+    Sharpens an image (PyQt6 QImage object) and returns a copy of the sharpened image. Does not affect the original.
     It converts it into a numpy array and performs some sharpening operations.
     :param q_image: QImage object
     :return: a copy of the sharpened image
     """
-    # crop the image and return a NEW image.
-    # don't change the passed one
-    return q_image  # change the statement
+    numpy_array = q_image_to_numpy(q_image)
+
+    height, width, _ = numpy_array.shape
+    new_image = np.zeros_like(numpy_array, dtype=np.float32)
+
+    # Create a Laplacian kernel for sharpening
+    kernel = np.array([[0, -1, 0],
+                       [-1, 5, -1],
+                       [0, -1, 0]])
+
+    for x in range(1, height - 1):
+        for y in range(1, width - 1):
+            # Extract the region of interest from the input image
+            region = numpy_array[x - 1:x + 2, y - 1:y + 2, :]
+
+            # Perform element-wise multiplication with the kernel and sum the result along both axes
+            new_image[x, y, :] = np.sum(region * kernel[:, :, np.newaxis], axis=(0, 1))
+
+    # Clip values to be within the valid range [0, 255]
+    new_image = np.clip(new_image, 0, 255)
+
+    new_image = new_image.astype(np.uint8)
+    new_image = numpy_to_q_image(new_image)
+    return new_image
 
 
 def change_brightness(q_image):
