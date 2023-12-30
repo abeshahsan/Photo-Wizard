@@ -28,7 +28,7 @@ class UI_MainWindow(QMainWindow):
         """Some necessary variables needed for canvas. Initializing with None now. will need later."""
         self.scene = QGraphicsScene()
         self.canvas.setScene(self.scene)
-        self.adjust_widget = UI_AdjustWidget(None)
+        self.adjust_widget = None
         self.save_file_path = None
         self.pixmap = None
         self.crop_rubber_band = None

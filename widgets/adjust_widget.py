@@ -11,6 +11,9 @@ class UI_AdjustWidget(QWidget):
         uic.loadUi(Filepaths.ADJUST_WIDGET(), self)
 
         self.main_widget = self.findChild(QWidget, "main_widget")
+
+        print(self.main_widget)
+
         self.blur_slider = self.findChild(QWidget, "blur_slider")
         self.canvas_controller = canvas_controller
 
