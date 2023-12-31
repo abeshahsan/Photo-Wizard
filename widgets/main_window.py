@@ -30,14 +30,13 @@ class UI_MainWindow(QMainWindow):
         self.canvas.setScene(self.scene)
         self.adjust_widget = None
         self.save_file_path = None
-        self.pixmap = None
+        self.scene_pixmap = None
+        self.original_pixmap = None
         self.crop_rubber_band = None
 
         """create a CanvasController to store all the elements related to the canvas."""
         self.canvas_controller = CanvasController()
         self.load_adjust_widget()
-
-        self.canvas.setFixedSize(800, (self.height() * 85) // 100)
 
         """Some event handlers needed for different operations."""
         self.action_open.triggered.connect(self.open_image)
@@ -68,10 +67,11 @@ class UI_MainWindow(QMainWindow):
         """
         image_file_path = self.choose_file()
 
-        self.pixmap = QPixmap(image_file_path)
-        self.canvas_controller.original_image = self.pixmap.toImage().copy()
+        self.original_pixmap = QPixmap(image_file_path)
+        self.scene_pixmap = self.original_pixmap.copy()
+        self.canvas_controller.original_image = self.scene_pixmap.toImage().copy()
         self.canvas_controller.scene_image = self.canvas_controller.original_image.copy()
-        if self.pixmap is not None and not self.pixmap.isNull():
+        if self.scene_pixmap is not None and not self.scene_pixmap.isNull():
             self.update_canvas()
 
     def enable_all(self):
@@ -82,7 +82,7 @@ class UI_MainWindow(QMainWindow):
 
     def save_new_file(self):
         """
-        Clicking 'Save as' or pressing Ctrl+Shift+S \n
+        Clicking 'Save as' or pressing Ctrl+Shift+S. \n
         If you want to save the image file for the first time, you need to create a file. \n
         So a file-dialogue will open to get the directory and the filename.
         :return:
@@ -92,16 +92,16 @@ class UI_MainWindow(QMainWindow):
         file_path, _ = file_dialogue.getSaveFileName(filter=filters, parent=self)
         self.save_file_path = file_path
         if file_path:
-            self.pixmap.save(file_path)
+            self.scene_pixmap.save(file_path)
 
     def save_file(self):
         """
-        Clicking 'Save' or pressing Ctrl+S \n
+        Clicking 'Save' or pressing Ctrl+S. \n
         Save the file, when the save-file already exists/created,
         :return:
         """
         if self.save_file_path:
-            self.pixmap.save(self.save_file_path)
+            self.scene_pixmap.save(self.save_file_path)
         else:  # If the save-file is not created, call save_new_file()
             self.save_new_file()
 
@@ -111,25 +111,28 @@ class UI_MainWindow(QMainWindow):
         But if it is smaller or equal, keep it as it is.
         :return:
         """
-        if self.pixmap.width() >= self.canvas.width() or self.pixmap.height() >= self.canvas.height():
-            self.pixmap = self.pixmap.scaled(int(self.canvas.width() * .99), int(self.canvas.height() * .99),
-                                             Qt.AspectRatioMode.KeepAspectRatio,
-                                             Qt.TransformationMode.SmoothTransformation)
+        if self.original_pixmap.width() >= self.canvas.width() or self.original_pixmap.height() >= self.canvas.height():
+            self.scene_pixmap = self.original_pixmap.scaled(int(self.canvas.width() * .99),
+                                                            int(self.canvas.height() * .99),
+                                                            Qt.AspectRatioMode.KeepAspectRatio,
+                                                            Qt.TransformationMode.SmoothTransformation)
+        else:
+            self.scene_pixmap = self.original_pixmap.copy()
 
     def crop_pixmap(self):
-        numpy_array = pixmap_to_numpy(self.pixmap)
+        numpy_array = pixmap_to_numpy(self.scene_pixmap)
         top, right, bottom, left = self.crop_rubber_band.get_crop_dimensions()
         numpy_array = numpy_array[top:bottom, left:right]
-        self.pixmap = numpy_to_pixmap(numpy_array)
-        return self.pixmap
+        self.scene_pixmap = numpy_to_pixmap(numpy_array)
+        return self.scene_pixmap
 
     def update_canvas(self):
         if not self.canvas_controller.scene_image_updated:
             return
-        self.pixmap = QPixmap(self.canvas_controller.scene_image)
+        self.scene_pixmap = QPixmap(self.canvas_controller.scene_image)
         self.scale_pixmap()
         self.scene = QGraphicsScene()
-        self.scene.addPixmap(self.pixmap)
+        self.scene.addPixmap(self.scene_pixmap)
         self.canvas.setScene(self.scene)
         self.canvas_controller.scene_image_updated.value = False
 
@@ -142,6 +145,10 @@ class UI_MainWindow(QMainWindow):
         self.crop_rubber_band = CropRubberBandWidget(self.canvas)
         self.crop_rubber_band.setGeometry(0, 0, self.canvas.width(), self.canvas.height())
         self.crop_rubber_band.show()
+
+    def resizeEvent(self, event):
+        if self.original_pixmap:
+            self.canvas_controller.scene_image_updated.value = True
 
 
 if __name__ == "__main__":
