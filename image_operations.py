@@ -165,17 +165,92 @@ def change_contrast(q_image):
     return new_image
 
 
+def rgb_to_hsv(rgb):
+    """
+    Convert RGB values to HSV.
+    """
+    r, g, b = rgb[..., 0], rgb[..., 1], rgb[..., 2]
+
+    max_val = np.max(rgb, axis=-1)
+    min_val = np.min(rgb, axis=-1)
+
+    delta = max_val - min_val
+
+    # Hue calculation
+    hue = np.zeros_like(max_val)
+
+    non_zero_delta = delta != 0
+    is_red = (max_val == r) & non_zero_delta
+    is_green = (max_val == g) & non_zero_delta
+    is_blue = (max_val == b) & non_zero_delta
+    
+    hue[is_red] = (60 * ((g[is_red] - b[is_red]) / delta[is_red] + 6)) % 360
+    hue[is_green] = (60 * ((b[is_green] - r[is_green]) / delta[is_green] + 2)) % 360
+    hue[is_blue] = (60 * ((r[is_blue] - g[is_blue]) / delta[is_blue] + 4)) % 360
+
+    # Saturation calculation
+    saturation = np.zeros_like(max_val)
+    saturation[non_zero_delta] = delta[non_zero_delta] / max_val[non_zero_delta]
+
+    # Value calculation
+    value = max_val
+
+    return np.stack([hue, saturation, value], axis=-1)
+
+def hsv_to_rgb(hsv):
+    """
+    Convert HSV values to RGB.
+    """
+    hue, saturation, value = hsv[..., 0], hsv[..., 1], hsv[..., 2]
+
+    c = value * saturation
+    x = c * (1 - np.abs((hue / 60) % 2 - 1))
+    m = value - c
+
+    rgb_prime = np.zeros_like(hsv)
+
+    mask_0 = (0 <= hue) & (hue < 60)
+    mask_1 = (60 <= hue) & (hue < 120)
+    mask_2 = (120 <= hue) & (hue < 180)
+    mask_3 = (180 <= hue) & (hue < 240)
+    mask_4 = (240 <= hue) & (hue < 300)
+    mask_5 = (300 <= hue) & (hue < 360)
+
+    rgb_prime[..., 0] = np.where(mask_0, c, np.where(mask_1, x, np.where(mask_2, 0, np.where(mask_3, x, np.where(mask_4, c, np.where(mask_5, x, 0)))))) + m
+    rgb_prime[..., 1] = np.where(mask_0, x, np.where(mask_1, c, np.where(mask_2, c, np.where(mask_3, x, np.where(mask_4, 0, np.where(mask_5, c, x)))))) + m
+    rgb_prime[..., 2] = np.where(mask_0, 0, np.where(mask_1, 0, np.where(mask_2, x, np.where(mask_3, c, np.where(mask_4, c, np.where(mask_5, x, 0)))))) + m
+
+    return (rgb_prime * 255).astype(np.uint8)
+
 def change_saturation(q_image):
     """
-    Changes the saturation of an image (PyQT6 QImage object) and returns a copy of the image.
-    Does not affect the original.\n
+    Changes the saturation of an image (PyQt6 QImage object) and returns a copy of the image.
+    Does not affect the original.
     It converts it into a numpy array and performs some saturation operations.
     :param q_image: QImage object
     :return: a copy of the image with changed saturation
     """
-    # increase the saturation of the image and return a NEW image.
-    # don't change the passed one
-    return q_image  # change the statement
+    # Convert QImage to NumPy array
+    numpy_array = q_image_to_numpy(q_image).astype(np.float64)
+
+    saturation_factor = 1
+
+    # Convert RGB to HSV color space
+    hsv_image = rgb_to_hsv(numpy_array)
+
+    # Modify saturation channel
+    hsv_image[..., 1] = np.clip(hsv_image[..., 1] * saturation_factor, 0, 1)
+
+    # Convert back to RGB color space
+    new_image = hsv_to_rgb(hsv_image)
+
+    # Clip values to the valid range [0, 255] and convert to uint8
+    new_image = np.clip(new_image, 0, 255).astype(np.uint8)
+
+    # Convert NumPy array back to QImage
+    new_image_qimage = numpy_to_q_image(new_image)
+
+    return new_image_qimage
 
 
 def change_exposure(q_image):
@@ -214,7 +289,7 @@ if __name__ == '__main__':
     # Load the image
     image_path = "F:/PythonProject/Updated2/Kena.png"
     image = QImage(image_path)
-    blurred_image = change_brightness(image)
+    blurred_image = change_saturation(image)
     pixmap = QPixmap(blurred_image)
 
     # Check if the image was loaded successfully
