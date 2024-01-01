@@ -11,8 +11,8 @@ class UI_ViewToolbarWidget(QWidget):
         uic.loadUi(Filepaths.VIEW_TOOLBAR(), self)
 
         self.main_widget = self.findChild(QWidget, "main_widget")
-        self.edit_button = self.findChild(QWidget, "edit_button")
-        self.rotate_button = self.findChild(QWidget, "rotate_button")
+        self.edit_button = self.findChild(QPushButton, "edit_button")
+        self.rotate_button = self.findChild(QPushButton, "rotate_button")
 
         self.edit_button.setFixedWidth(50)
         self.rotate_button.setFixedWidth(50)

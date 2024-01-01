@@ -11,6 +11,7 @@ from widgets.adjust_widget import UI_AdjustWidget
 import image_operations
 from canvas_controller import CanvasController
 from widgets.view_toolbar import UI_ViewToolbarWidget
+from widgets.edit_toolbar import UI_EditToolbarWidget
 
 
 class UI_MainWindow(QMainWindow):
@@ -45,6 +46,7 @@ class UI_MainWindow(QMainWindow):
         """Load the necessary widgets. This will just load the UI file, but will not add it to the scene yet."""
         self.adjust_widget = UI_AdjustWidget(self.canvas_controller)
         self.view_toolbar_widget = UI_ViewToolbarWidget()
+        self.edit_toolbar_widget = UI_EditToolbarWidget()
 
         self.add_view_toolbar_widget()
 
@@ -165,10 +167,18 @@ class UI_MainWindow(QMainWindow):
     def event_clicked_on_edit_button(self):
         self.add_adjust_widget()
         self.remove_view_toolbar_widget()
+        self.add_edit_toolbar_widget()
 
     def resizeEvent(self, event):
         if self.original_pixmap:
             self.canvas_controller.scene_image_updated.value = True
+
+    def add_edit_toolbar_widget(self):
+        self.toolbar.addWidget(self.edit_toolbar_widget.main_widget)
+
+    def remove_edit_toolbar_widget(self):
+        self.toolbar.removeWidget(self.edit_toolbar_widget.main_widget)
+        self.edit_toolbar_widget.main_widget.setParent(None)
 
 
 if __name__ == "__main__":

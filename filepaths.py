@@ -6,6 +6,7 @@ class Filepaths:
     __ADJUST_WIDGET = 'ui_files/adjust-widget.ui'
     __TEMP = 'ui_files/untitled.ui'
     __VIEW_TOOLBAR = 'ui_files/view_toolbar.ui'
+    __EDIT_TOOLBAR = 'ui_files/edit_toolbar.ui'
 
     @staticmethod
     def MAIN_WINDOW():
@@ -22,7 +23,11 @@ class Filepaths:
     @staticmethod
     def VIEW_TOOLBAR():
         return os.path.abspath(Filepaths.__VIEW_TOOLBAR)
+    
+    @staticmethod
+    def EDIT_TOOLBAR():
+        return os.path.abspath(Filepaths.__EDIT_TOOLBAR)
 
 
 if __name__ == '__main__':
-    print(Filepaths.ADJUST_WIDGET())
+    print(Filepaths.EDIT_TOOLBAR())
