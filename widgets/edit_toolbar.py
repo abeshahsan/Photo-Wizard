@@ -21,6 +21,7 @@ class UI_EditToolbarWidget(QWidget):
         self.adjustment_button.setFixedWidth(50)
         self.filter_button.setFixedWidth(50)
         self.doodle_button.setFixedWidth(50)
+        self.cancel_button.setFixedWidth(50)
 
 
 if __name__ == "__main__":
