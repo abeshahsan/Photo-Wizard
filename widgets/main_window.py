@@ -56,6 +56,7 @@ class UI_MainWindow(QMainWindow):
         self.action_save.triggered.connect(self.save_file)
         self.canvas_controller.scene_image_updated.valueChanged.connect(self.update_canvas)
         self.view_toolbar_widget.edit_button.clicked.connect(self.event_clicked_on_edit_button)
+        self.edit_toolbar_widget.adjustment_button.clicked.connect(self.event_clicked_on_adjustment_button)
         # self.cancel_button.clicked.connect(self.load_adjust_widget)
 
     def choose_file(self):
@@ -165,7 +166,7 @@ class UI_MainWindow(QMainWindow):
         self.crop_rubber_band.show()
 
     def event_clicked_on_edit_button(self):
-        self.add_adjust_widget()
+        # self.add_adjust_widget()
         self.remove_view_toolbar_widget()
         self.add_edit_toolbar_widget()
 
@@ -179,6 +180,9 @@ class UI_MainWindow(QMainWindow):
     def remove_edit_toolbar_widget(self):
         self.toolbar.removeWidget(self.edit_toolbar_widget.main_widget)
         self.edit_toolbar_widget.main_widget.setParent(None)
+
+    def event_clicked_on_adjustment_button(self):
+        self.add_adjust_widget()
 
 
 if __name__ == "__main__":

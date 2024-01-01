@@ -14,12 +14,16 @@ class UI_AdjustWidget(QWidget):
 
         # print(self.main_widget)
 
-        self.blur_slider = self.findChild(QWidget, "blur_slider")
-        self.sharpen_slider = self.findChild(QWidget, "sharpen_slider")
+        self.blur_slider = self.findChild(QSlider, "blur_slider")
+        self.sharpen_slider = self.findChild(QSlider, "sharpen_slider")
+        self.contrast_slider = self.findChild(QSlider, "contrast_slider")
+        self.brightness_slider = self.findChild(QSlider, "brightness_slider")
         self.canvas_controller = canvas_controller
 
         self.blur_slider.valueChanged.connect(self.blur)
         self.sharpen_slider.valueChanged.connect(self.sharpen)
+        self.contrast_slider.valueChanged.connect(self.contrast)
+        self.brightness_slider.valueChanged.connect(self.brightness)
 
     def blur(self):
         self.canvas_controller.scene_image = image_operations.blur(self.canvas_controller.original_image)
@@ -27,6 +31,14 @@ class UI_AdjustWidget(QWidget):
 
     def sharpen(self):
         self.canvas_controller.scene_image = image_operations.sharpen(self.canvas_controller.original_image)
+        self.canvas_controller.scene_image_updated.value = True
+
+    def contrast(self):
+        self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.original_image)
+        self.canvas_controller.scene_image_updated.value = True
+
+    def brightness(self):
+        self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.original_image)
         self.canvas_controller.scene_image_updated.value = True
 
 

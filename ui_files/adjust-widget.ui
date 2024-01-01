@@ -45,8 +45,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>394</width>
-           <height>722</height>
+           <width>402</width>
+           <height>730</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -84,12 +84,68 @@
           <item>
            <widget class="QLabel" name="sharpen_label">
             <property name="text">
-             <string>sharpen</string>
+             <string>Sharpen</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QSlider" name="sharpen_slider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="contrast_label">
+            <property name="text">
+             <string>Contrast</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="contrast_slider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="saturation_label">
+            <property name="text">
+             <string>Saturation</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="saturation_slider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="exposure_label">
+            <property name="text">
+             <string>Exposure</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="exposure_slider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="warmth_label">
+            <property name="text">
+             <string>Warmth</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="warmth_slider">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
