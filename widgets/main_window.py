@@ -55,6 +55,7 @@ class UI_MainWindow(QMainWindow):
         self.canvas_controller.scene_image_updated.valueChanged.connect(self.update_canvas)
         self.view_toolbar_widget.edit_button.clicked.connect(self.event_clicked_on_edit_button)
         self.edit_toolbar_widget.adjustment_button.clicked.connect(self.event_clicked_on_adjustment_button)
+        self.edit_toolbar_widget.cancel_button.clicked.connect(self.event_clicked_on_cancel_button)
         # self.cancel_button.clicked.connect(self.load_adjust_widget)
 
     def choose_file(self):
@@ -77,6 +78,7 @@ class UI_MainWindow(QMainWindow):
         * If you select an image file, it loads it into the screen.
         :return:
         """
+        self.add_view_toolbar_widget()
         image_file_path = self.choose_file()
 
         self.original_pixmap = QPixmap(image_file_path)
@@ -85,7 +87,6 @@ class UI_MainWindow(QMainWindow):
         self.canvas_controller.scene_image = self.canvas_controller.original_image.copy()
         if self.scene_pixmap is not None and not self.scene_pixmap.isNull():
             self.update_canvas()
-            self.add_view_toolbar_widget()
 
     def enable_all(self):
         self.action_save_as.setEnabled(True)
@@ -182,6 +183,11 @@ class UI_MainWindow(QMainWindow):
 
     def event_clicked_on_adjustment_button(self):
         self.add_adjust_widget()
+
+    def event_clicked_on_cancel_button(self):
+        self.remove_adjust_widget()
+        self.remove_edit_toolbar_widget()
+        self.add_view_toolbar_widget()
 
 
 if __name__ == "__main__":
