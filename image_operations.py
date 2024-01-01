@@ -205,7 +205,7 @@ if __name__ == '__main__':
     # Load the image
     image_path = "C:/Users/Dell/Pictures/bg.jpg"
     image = QImage(image_path)
-    blurred_image = blur(image)
+    blurred_image = sharpen(image)
     pixmap = QPixmap(blurred_image)
 
     # Check if the image was loaded successfully
