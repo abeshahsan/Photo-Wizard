@@ -48,8 +48,6 @@ class UI_MainWindow(QMainWindow):
         self.view_toolbar_widget = UI_ViewToolbarWidget()
         self.edit_toolbar_widget = UI_EditToolbarWidget()
 
-        self.add_view_toolbar_widget()
-
         """Some event handlers needed for different operations."""
         self.action_open.triggered.connect(self.open_image)
         self.action_save_as.triggered.connect(self.save_new_file)
@@ -87,6 +85,7 @@ class UI_MainWindow(QMainWindow):
         self.canvas_controller.scene_image = self.canvas_controller.original_image.copy()
         if self.scene_pixmap is not None and not self.scene_pixmap.isNull():
             self.update_canvas()
+            self.add_view_toolbar_widget()
 
     def enable_all(self):
         self.action_save_as.setEnabled(True)
