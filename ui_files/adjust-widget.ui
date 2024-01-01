@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>adjust-widget</class>
- <widget class="QWidget" name="adjust-widget">
+ <class>adjust_widget</class>
+ <widget class="QWidget" name="adjust_widget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>446</width>
-    <height>664</height>
+    <width>440</width>
+    <height>768</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -25,81 +25,103 @@
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
-  <widget class="QWidget" name="main_widget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>451</width>
-     <height>661</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="main_container" stretch="0,1">
-    <property name="spacing">
-     <number>10</number>
-    </property>
-    <property name="leftMargin">
-     <number>20</number>
-    </property>
-    <property name="topMargin">
-     <number>50</number>
-    </property>
-    <property name="rightMargin">
-     <number>20</number>
-    </property>
-    <item>
-     <layout class="QHBoxLayout" name="blur_container" stretch="0,1">
-      <property name="spacing">
-       <number>15</number>
-      </property>
-      <property name="sizeConstraint">
-       <enum>QLayout::SetDefaultConstraint</enum>
-      </property>
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
-      </property>
-      <property name="rightMargin">
-       <number>0</number>
-      </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QWidget" name="main_widget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QLabel" name="blur_label">
-        <property name="midLineWidth">
-         <number>0</number>
+       <widget class="QScrollArea" name="scrollArea">
+        <property name="verticalScrollBarPolicy">
+         <enum>Qt::ScrollBarAsNeeded</enum>
         </property>
-        <property name="text">
-         <string>Blur</string>
+        <property name="widgetResizable">
+         <bool>true</bool>
         </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QSlider" name="blur_slider">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
         </property>
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
+        <widget class="QWidget" name="scrollAreaWidgetContents">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>394</width>
+           <height>722</height>
+          </rect>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="blur_label">
+            <property name="text">
+             <string>Blur</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="blur_slider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="brightness_label">
+            <property name="text">
+             <string>Brightness</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="brightness_slider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="sharpen_label">
+            <property name="text">
+             <string>sharpen</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSlider" name="sharpen_slider">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QListWidget" name="listWidget">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="autoFillBackground">
+             <bool>false</bool>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow">
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="lineWidth">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
        </widget>
       </item>
      </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2"/>
-    </item>
-   </layout>
-  </widget>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
