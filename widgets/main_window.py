@@ -48,8 +48,6 @@ class UI_MainWindow(QMainWindow):
         self.view_toolbar_widget = UI_ViewToolbarWidget()
         self.edit_toolbar_widget = UI_EditToolbarWidget()
 
-        self.add_view_toolbar_widget()
-
         """Some event handlers needed for different operations."""
         self.action_open.triggered.connect(self.open_image)
         self.action_save_as.triggered.connect(self.save_new_file)
@@ -57,6 +55,8 @@ class UI_MainWindow(QMainWindow):
         self.canvas_controller.scene_image_updated.valueChanged.connect(self.update_canvas)
         self.view_toolbar_widget.edit_button.clicked.connect(self.event_clicked_on_edit_button)
         self.edit_toolbar_widget.adjustment_button.clicked.connect(self.event_clicked_on_adjustment_button)
+        self.edit_toolbar_widget.cancel_button.clicked.connect(self.event_clicked_on_cancel_button)
+        self.edit_toolbar_widget.crop_button.clicked.connect(self.event_clicked_on_crop_button)
         # self.cancel_button.clicked.connect(self.load_adjust_widget)
 
     def choose_file(self):
@@ -79,6 +79,7 @@ class UI_MainWindow(QMainWindow):
         * If you select an image file, it loads it into the screen.
         :return:
         """
+        self.add_view_toolbar_widget()
         image_file_path = self.choose_file()
 
         self.original_pixmap = QPixmap(image_file_path)
@@ -160,10 +161,15 @@ class UI_MainWindow(QMainWindow):
         self.view_toolbar_widget.main_widget.setParent(None)
         # self.view_toolbar_widget.main_widget.close()
 
-    def load_crop_rubberband(self):
+    def add_crop_rubberband(self):
         self.crop_rubber_band = CropRubberBandWidget(self.canvas)
-        self.crop_rubber_band.setGeometry(0, 0, self.canvas.width(), self.canvas.height())
+        self.crop_rubber_band.setGeometry(self.canvas.pos().x(), self.canvas.pos().y(), self.scene_pixmap.width(),
+                                          self.scene_pixmap.height())
         self.crop_rubber_band.show()
+
+    def remove_crop_rubberband(self):
+        if self.crop_rubber_band:
+            self.crop_rubber_band.close()
 
     def event_clicked_on_edit_button(self):
         # self.add_adjust_widget()
@@ -183,6 +189,16 @@ class UI_MainWindow(QMainWindow):
 
     def event_clicked_on_adjustment_button(self):
         self.add_adjust_widget()
+
+    def event_clicked_on_cancel_button(self):
+        self.remove_adjust_widget()
+        self.remove_edit_toolbar_widget()
+        self.remove_crop_rubberband()
+        self.add_view_toolbar_widget()
+
+    def event_clicked_on_crop_button(self):
+        self.remove_adjust_widget()
+        self.add_crop_rubberband()
 
 
 if __name__ == "__main__":
