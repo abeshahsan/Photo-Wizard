@@ -12,7 +12,7 @@ class UI_AdjustWidget(QWidget):
 
         self.main_widget = self.findChild(QWidget, "main_widget")
 
-        print(self.main_widget)
+        # print(self.main_widget)
 
         self.blur_slider = self.findChild(QWidget, "blur_slider")
         self.sharpen_slider = self.findChild(QWidget, "sharpen_slider")

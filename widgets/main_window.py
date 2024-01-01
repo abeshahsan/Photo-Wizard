@@ -23,6 +23,7 @@ class UI_MainWindow(QMainWindow):
         # The canvas is to hold the image to be shown on the screen.
         self.canvas = self.findChild(QGraphicsView, 'canvas')
         self.editor_container = self.findChild(QHBoxLayout, 'editor_container')
+        self.horizontalLayout_3 = self.findChild(QHBoxLayout, 'horizontalLayout_3')
         self.cancel_button = self.findChild(QPushButton, 'cancel_button')
 
         """Some necessary variables needed for canvas. Initializing with None now. will need later."""
@@ -37,6 +38,11 @@ class UI_MainWindow(QMainWindow):
         """create a CanvasController to store all the elements related to the canvas."""
         self.canvas_controller = CanvasController()
         self.load_adjust_widget()
+        self.add_adjust_widget()
+
+        self.remove_adjust_widget()
+
+        self.add_adjust_widget()
 
         """Some event handlers needed for different operations."""
         self.action_open.triggered.connect(self.open_image)
@@ -129,7 +135,7 @@ class UI_MainWindow(QMainWindow):
     def update_canvas(self):
         if not self.canvas_controller.scene_image_updated:
             return
-        self.scene_pixmap = QPixmap(self.canvas_controller.scene_image)
+        self.original_pixmap = QPixmap(self.canvas_controller.scene_image)
         self.scale_pixmap()
         self.scene = QGraphicsScene()
         self.scene.addPixmap(self.scene_pixmap)
@@ -138,8 +144,14 @@ class UI_MainWindow(QMainWindow):
 
     def load_adjust_widget(self):
         self.adjust_widget = UI_AdjustWidget(self.canvas_controller)
+
+    def add_adjust_widget(self):
         self.editor_container.addWidget(self.adjust_widget.main_widget)
         self.editor_container.setStretch(0, 1)
+
+    def remove_adjust_widget(self):
+        self.editor_container.removeWidget(self.adjust_widget.main_widget)
+        self.adjust_widget.main_widget.setParent(None)
 
     def load_crop_rubberband(self):
         self.crop_rubber_band = CropRubberBandWidget(self.canvas)
