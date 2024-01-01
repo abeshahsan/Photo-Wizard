@@ -57,6 +57,7 @@ class UI_MainWindow(QMainWindow):
         self.edit_toolbar_widget.adjustment_button.clicked.connect(self.event_clicked_on_adjustment_button)
         self.edit_toolbar_widget.cancel_button.clicked.connect(self.event_clicked_on_cancel_button)
         self.edit_toolbar_widget.crop_button.clicked.connect(self.event_clicked_on_crop_button)
+        self.edit_toolbar_widget.save_button.clicked.connect(self.save_button_clicked_on_edit_toolbar)
         # self.cancel_button.clicked.connect(self.load_adjust_widget)
 
     def choose_file(self):
@@ -141,6 +142,8 @@ class UI_MainWindow(QMainWindow):
         self.scale_pixmap()
         self.scene = QGraphicsScene()
         self.scene.addPixmap(self.scene_pixmap)
+        pixmap_item = QGraphicsPixmapItem(self.scene_pixmap)
+        print(pixmap_item.scenePos())
         self.canvas.setScene(self.scene)
         self.canvas_controller.scene_image_updated.value = False
 
@@ -203,6 +206,11 @@ class UI_MainWindow(QMainWindow):
     def event_clicked_on_crop_button(self):
         self.remove_adjust_widget()
         self.add_crop_rubberband()
+        self.canvas_controller.scene_image_updated.value = True
+
+    def save_button_clicked_on_edit_toolbar(self):
+        top, bottom, right, left = self.crop_rubber_band.get_crop_dimensions()
+        self.canvas_controller.scene_image = image_operations.crop(self.canvas_controller.scene_image, top, bottom, right, left)
         self.canvas_controller.scene_image_updated.value = True
 
 
