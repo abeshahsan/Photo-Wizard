@@ -146,14 +146,16 @@ class UI_MainWindow(QMainWindow):
 
     def remove_adjust_widget(self):
         self.editor_container.removeWidget(self.adjust_widget.main_widget)
-        self.adjust_widget.main_widget.deleteLater()
+        self.adjust_widget.main_widget.setParent(None)
+        self.adjust_widget.main_widget.close()
 
     def add_view_toolbar_widget(self):
         self.toolbar.addWidget(self.view_toolbar_widget.main_widget)
 
     def remove_view_toolbar_widget(self):
         self.toolbar.removeWidget(self.view_toolbar_widget.main_widget)
-        self.view_toolbar_widget.main_widget.deleteLater()
+        self.view_toolbar_widget.main_widget.setParent(None)
+        # self.view_toolbar_widget.main_widget.close()
 
     def load_crop_rubberband(self):
         self.crop_rubber_band = CropRubberBandWidget(self.canvas)
