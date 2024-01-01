@@ -138,9 +138,17 @@ def change_brightness(q_image):
     :param q_image: QImage object
     :return: a copy of the image with changed brightness
     """
-    # increase the brightness of the image and return a NEW image.
-    # don't change the passed one
-    return q_image  # change the statement
+    numpy_array = q_image_to_numpy(q_image)
+    new_image = np.zeros_like(numpy_array, dtype=np.float32)
+    brightness_factor = 20
+    for y in range(numpy_array.shape[0]):
+        for x in range(numpy_array.shape[1]):
+            for c in range(numpy_array.shape[2]):
+                new_image[y, x, c] = np.clip(numpy_array[y, x, c] + brightness_factor, 0, 255)
+
+    new_image = new_image.astype(np.uint8)
+    new_image = numpy_to_q_image(new_image)
+    return new_image
 
 
 def change_contrast(q_image):
@@ -151,9 +159,16 @@ def change_contrast(q_image):
     :param q_image: QImage object
     :return: a copy of the image with changed contrast
     """
-    # increase the contrast of the image and return a NEW image.
-    # don't change the passed one
-    return q_image  # change the statement
+    numpy_array = q_image_to_numpy(q_image)
+    new_image = np.zeros_like(numpy_array, dtype=np.float32)
+    contrast_factor = 1.4  # better if within 1-3
+    for y in range(numpy_array.shape[0]):
+        for x in range(numpy_array.shape[1]):
+            for c in range(numpy_array.shape[2]):
+                new_image[y, x, c] = np.power(numpy_array[y, x, c] / 255.0, contrast_factor) * 255.0
+    new_image = new_image.astype(np.uint8)
+    new_image = numpy_to_q_image(new_image)
+    return new_image
 
 
 def change_saturation(q_image):

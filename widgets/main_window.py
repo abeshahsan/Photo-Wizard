@@ -10,6 +10,7 @@ from widgets.crop_rubberband_widget import CropRubberBandWidget
 from widgets.adjust_widget import UI_AdjustWidget
 import image_operations
 from canvas_controller import CanvasController
+from widgets.view_toolbar import UI_ViewToolbarWidget
 
 
 class UI_MainWindow(QMainWindow):
@@ -25,6 +26,7 @@ class UI_MainWindow(QMainWindow):
         self.editor_container = self.findChild(QHBoxLayout, 'editor_container')
         self.horizontalLayout_3 = self.findChild(QHBoxLayout, 'horizontalLayout_3')
         self.cancel_button = self.findChild(QPushButton, 'cancel_button')
+        self.toolbar = self.findChild(QHBoxLayout, 'toolbar')
 
         """Some necessary variables needed for canvas. Initializing with None now. will need later."""
         self.scene = QGraphicsScene()
@@ -34,21 +36,24 @@ class UI_MainWindow(QMainWindow):
         self.scene_pixmap = None
         self.original_pixmap = None
         self.crop_rubber_band = None
+        self.view_toolbar_edit_button = None
+        self.view_toolbar_rotate_button = None
 
         """create a CanvasController to store all the elements related to the canvas."""
         self.canvas_controller = CanvasController()
-        self.load_adjust_widget()
-        self.add_adjust_widget()
 
-        self.remove_adjust_widget()
+        """Load the necessary widgets. This will just load the UI file, but will not add it to the scene yet."""
+        self.adjust_widget = UI_AdjustWidget(self.canvas_controller)
+        self.view_toolbar_widget = UI_ViewToolbarWidget()
 
-        self.add_adjust_widget()
+        self.add_view_toolbar_widget()
 
         """Some event handlers needed for different operations."""
         self.action_open.triggered.connect(self.open_image)
         self.action_save_as.triggered.connect(self.save_new_file)
         self.action_save.triggered.connect(self.save_file)
         self.canvas_controller.scene_image_updated.valueChanged.connect(self.update_canvas)
+        self.view_toolbar_widget.edit_button.clicked.connect(self.event_clicked_on_edit_button)
         # self.cancel_button.clicked.connect(self.load_adjust_widget)
 
     def choose_file(self):
@@ -125,13 +130,6 @@ class UI_MainWindow(QMainWindow):
         else:
             self.scene_pixmap = self.original_pixmap.copy()
 
-    def crop_pixmap(self):
-        numpy_array = pixmap_to_numpy(self.scene_pixmap)
-        top, right, bottom, left = self.crop_rubber_band.get_crop_dimensions()
-        numpy_array = numpy_array[top:bottom, left:right]
-        self.scene_pixmap = numpy_to_pixmap(numpy_array)
-        return self.scene_pixmap
-
     def update_canvas(self):
         if not self.canvas_controller.scene_image_updated:
             return
@@ -142,21 +140,29 @@ class UI_MainWindow(QMainWindow):
         self.canvas.setScene(self.scene)
         self.canvas_controller.scene_image_updated.value = False
 
-    def load_adjust_widget(self):
-        self.adjust_widget = UI_AdjustWidget(self.canvas_controller)
-
     def add_adjust_widget(self):
         self.editor_container.addWidget(self.adjust_widget.main_widget)
         self.editor_container.setStretch(0, 1)
 
     def remove_adjust_widget(self):
         self.editor_container.removeWidget(self.adjust_widget.main_widget)
-        self.adjust_widget.main_widget.setParent(None)
+        self.adjust_widget.main_widget.deleteLater()
+
+    def add_view_toolbar_widget(self):
+        self.toolbar.addWidget(self.view_toolbar_widget.main_widget)
+
+    def remove_view_toolbar_widget(self):
+        self.toolbar.removeWidget(self.view_toolbar_widget.main_widget)
+        self.view_toolbar_widget.main_widget.deleteLater()
 
     def load_crop_rubberband(self):
         self.crop_rubber_band = CropRubberBandWidget(self.canvas)
         self.crop_rubber_band.setGeometry(0, 0, self.canvas.width(), self.canvas.height())
         self.crop_rubber_band.show()
+
+    def event_clicked_on_edit_button(self):
+        self.add_adjust_widget()
+        self.remove_view_toolbar_widget()
 
     def resizeEvent(self, event):
         if self.original_pixmap:
