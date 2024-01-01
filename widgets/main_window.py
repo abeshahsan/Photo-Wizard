@@ -171,14 +171,15 @@ class UI_MainWindow(QMainWindow):
         if self.crop_rubber_band:
             self.crop_rubber_band.close()
 
+    def resizeEvent(self, event):
+        if self.original_pixmap:
+            self.canvas_controller.scene_image_updated.value = True
+
     def event_clicked_on_edit_button(self):
         # self.add_adjust_widget()
         self.remove_view_toolbar_widget()
         self.add_edit_toolbar_widget()
-
-    def resizeEvent(self, event):
-        if self.original_pixmap:
-            self.canvas_controller.scene_image_updated.value = True
+        self.canvas_controller.scene_image_updated.value = True
 
     def add_edit_toolbar_widget(self):
         self.toolbar.addWidget(self.edit_toolbar_widget.main_widget)
@@ -189,16 +190,20 @@ class UI_MainWindow(QMainWindow):
 
     def event_clicked_on_adjustment_button(self):
         self.add_adjust_widget()
+        self.remove_crop_rubberband()
+        self.canvas_controller.scene_image_updated.value = True
 
     def event_clicked_on_cancel_button(self):
         self.remove_adjust_widget()
         self.remove_edit_toolbar_widget()
         self.remove_crop_rubberband()
         self.add_view_toolbar_widget()
+        self.canvas_controller.scene_image_updated.value = True
 
     def event_clicked_on_crop_button(self):
         self.remove_adjust_widget()
         self.add_crop_rubberband()
+        self.canvas_controller.scene_image_updated.value = True
 
 
 if __name__ == "__main__":
