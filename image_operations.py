@@ -18,6 +18,7 @@ def q_image_to_numpy(q_image):
     # Convert QImage to a format compatible with NumPy
     buffer = q_image.constBits().asarray(height * width * 4)  # Assuming 4 bytes per pixel (RGBA)
     arr = np.frombuffer(buffer, np.uint8).reshape((height, width, 4))  # Reshape buffer to image dimensions
+    
     return arr[:, :, :3].copy()  # Return RGB channels and make a copy
 
 
@@ -94,7 +95,7 @@ def blur(q_image):
 
     new_image = new_image.astype(np.uint8)
     new_image = numpy_to_q_image(new_image)
-    return new_image  # change the statement
+    return new_image.copy()  # change the statement
 
 
 def sharpen(q_image):
@@ -127,7 +128,7 @@ def sharpen(q_image):
 
     new_image = new_image.astype(np.uint8)
     new_image = numpy_to_q_image(new_image)
-    return new_image
+    return new_image.copy()
 
 
 def change_brightness(q_image, brightness_factor):
@@ -139,11 +140,10 @@ def change_brightness(q_image, brightness_factor):
     :return: a copy of the image with changed brightness
     """
     numpy_array = q_image_to_numpy(q_image).astype(np.int16)
-
     # Add brightness factor and clip to [0, 255] range
     new_image = np.clip(numpy_array + brightness_factor, 0, 255).astype(np.uint8)
     new_image = numpy_to_q_image(new_image)
-    return new_image
+    return new_image.copy()
 
 
 def change_contrast(q_image, contrast_factor):
@@ -160,7 +160,8 @@ def change_contrast(q_image, contrast_factor):
     # Apply contrast adjustment to each RGB channel independently
     new_image = np.clip(((numpy_array - 128) * contrast_factor) + 128, 0, 255).astype(np.uint8)
     new_image = numpy_to_q_image(new_image)
-    return new_image
+    new_image = np.clip(new_image, 0, 255)
+    return new_image.copy()
 
 
 def rgb_to_hsv(rgb_image):
@@ -240,8 +241,9 @@ def change_saturation(q_image, saturation_factor):
     hsv_image = rgb_to_hsv(numpy_array)
     hsv_image[:, :, 1] = np.clip(hsv_image[:, :, 1] * saturation_factor, 0, 1)
     new_image = hsv_to_rgb(hsv_image).astype(np.uint8)
+    new_image = np.clip(new_image, 0, 255)
     new_image = numpy_to_q_image(new_image)
-    return new_image
+    return new_image.copy()
 
 
 def change_exposure(q_image, exposure_factor):
@@ -255,12 +257,14 @@ def change_exposure(q_image, exposure_factor):
     """
     # increase the exposure of the image and return a NEW image.
     # don't change the passed one
-    numpy_array = q_image_to_numpy(q_image).astype(np.int16)
-
+    numpy_array = q_image_to_numpy(q_image).astype(np.uint16)
+    print("Crashed 1")
     # Apply exposure adjustment to each RGB channel independently
     new_image = np.clip(numpy_array * exposure_factor, 0, 255).astype(np.uint8)
+    print("Crashed 2")
     new_image = numpy_to_q_image(new_image)
-    return new_image
+    print("Crashed 3")
+    return new_image.copy()
 
 
 def change_warmth(q_image, warmth_factor):
@@ -281,7 +285,7 @@ def change_warmth(q_image, warmth_factor):
     # Clip values to be within the valid range [0, 255]
     new_image = np.clip(new_image, 0, 255).astype(np.uint8)
     new_image = numpy_to_q_image(new_image)
-    return new_image
+    return new_image.copy()
 
 """
 To test the functions above.
@@ -293,7 +297,7 @@ if __name__ == '__main__':
     # Load the image
     image_path = "F:/PythonProject/Updated2/Kena.png"
     image = QImage(image_path)
-    blurred_image = change_saturation(image, 2.0)
+    blurred_image = change_exposure(image, 2.0)
     pixmap = QPixmap(blurred_image)
 
     # Check if the image was loaded successfully
