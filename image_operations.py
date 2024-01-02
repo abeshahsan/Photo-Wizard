@@ -18,7 +18,7 @@ def q_image_to_numpy(q_image):
     # Convert QImage to a format compatible with NumPy
     buffer = q_image.constBits().asarray(height * width * 4)  # Assuming 4 bytes per pixel (RGBA)
     arr = np.frombuffer(buffer, np.uint8).reshape((height, width, 4))  # Reshape buffer to image dimensions
-    
+
     return arr.copy()  # Return a copy to include the alpha channel
 
 
@@ -310,6 +310,7 @@ def change_warmth(q_image, warmth_factor):
 
     return new_image_qimage.copy()
 
+
 """
 To test the functions above.
 """
@@ -318,7 +319,7 @@ if __name__ == '__main__':
     scene = QGraphicsScene()
 
     # Load the image
-    image_path = "F:/PythonProject/Updated2/Kena.png"
+    image_path = "F:/UNI_STUFF/5th Sem/Photo-Wizard/Kena.png"
     image = QImage(image_path)
     blurred_image = change_exposure(image, 2.0)
     pixmap = QPixmap(blurred_image)

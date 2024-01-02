@@ -33,28 +33,14 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>362</width>
-           <height>262</height>
+           <width>354</width>
+           <height>254</height>
           </rect>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <property name="spacing">
            <number>0</number>
           </property>
-          <item>
-           <widget class="QPushButton" name="cool_light">
-            <property name="text">
-             <string>Cool light</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="vintage">
-            <property name="text">
-             <string>Vintage</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </widget>
