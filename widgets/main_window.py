@@ -1,17 +1,14 @@
-import copy
-
 from PyQt6 import uic
-from PyQt6.QtGui import *
 from PyQt6.QtCore import *
+from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
-from filepaths import Filepaths
-from utilites import ValueProperty, pixmap_to_numpy, numpy_to_pixmap
-from widgets.crop_rubberband_widget import CropRubberBandWidget
-from widgets.adjust_widget import UI_AdjustWidget
-import image_operations
+
 from canvas_controller import CanvasController
-from widgets.view_toolbar import UI_ViewToolbarWidget
+from filepaths import Filepaths
+from widgets.adjust_widget import UI_AdjustWidget
+from widgets.crop_rubberband_widget import CropRubberBandWidget
 from widgets.edit_toolbar import UI_EditToolbarWidget
+from widgets.view_toolbar import UI_ViewToolbarWidget
 
 
 class UI_MainWindow(QMainWindow):
@@ -19,7 +16,6 @@ class UI_MainWindow(QMainWindow):
         super().__init__()
         uic.loadUi(Filepaths.MAIN_WINDOW(), self)
         self.setWindowTitle('Photo Wizard')
-        # self.setFixedSize(800, 600)
 
         """Loading necessary objects from the loaded ui."""
         # The canvas is to hold the image to be shown on the screen.

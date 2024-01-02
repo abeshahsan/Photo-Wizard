@@ -18,6 +18,9 @@ class UI_AdjustWidget(QWidget):
         self.sharpen_slider = self.findChild(QSlider, "sharpen_slider")
         self.contrast_slider = self.findChild(QSlider, "contrast_slider")
         self.brightness_slider = self.findChild(QSlider, "brightness_slider")
+        self.exposure_slider = self.findChild(QSlider, "exposure_slider")
+        self.warmth_slider = self.findChild(QSlider, "warmth_slider")
+        self.saturation_slider = self.findChild(QSlider, "saturation_slider")
         self.canvas_controller = canvas_controller
 
         self.blur_slider.valueChanged.connect(self.blur)
@@ -39,6 +42,14 @@ class UI_AdjustWidget(QWidget):
 
     def brightness(self):
         self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.original_image)
+        self.canvas_controller.scene_image_updated.value = True
+
+    def warmth(self):
+        self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.original_image)
+        self.canvas_controller.scene_image_updated.value = True
+
+    def saturation(self):
+        self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.original_image)
         self.canvas_controller.scene_image_updated.value = True
 
 
