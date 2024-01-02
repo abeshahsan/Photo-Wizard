@@ -240,11 +240,9 @@ def change_saturation(argb_image, saturation_factor):
     saturation_factor within 1.0-1.4
     """
     argb_image = q_image_to_numpy(argb_image)
-    input_shape = argb_image.shape
-    alpha, red, green, blue = argb_image[:, :, 0], argb_image[:, :, 1], argb_image[:, :, 2], argb_image[:, :, 3]
 
     # Convert ARGB to RGBA for HSV conversion
-    rgba_image = np.dstack([red, green, blue, alpha])
+    rgba_image = argb_image[:, :, [1, 2, 3, 0]]
 
     # Convert RGBA to HSV
     hsv_image = rgba_to_hsv(rgba_image)
@@ -256,16 +254,12 @@ def change_saturation(argb_image, saturation_factor):
     new_rgba_image = hsv_to_rgba(hsv_image)
 
     # Extract ARGB channels
-    new_alpha, new_red, new_green, new_blue = new_rgba_image[:, :, 3], new_rgba_image[:, :, 0], new_rgba_image[:, :, 1], new_rgba_image[:, :, 2]
+    new_argb_image = new_rgba_image[:, :, [3, 0, 1, 2]]
 
-    # Stack ARGB channels
-    new_argb_image = np.dstack([new_alpha, new_red, new_green, new_blue])
+    # Convert NumPy array back to QImage
+    new_argb_qimage = numpy_to_q_image(new_argb_image)
 
-    new_argb_image = new_argb_image.reshape(input_shape)
-
-    new_argb_image = numpy_to_q_image(new_argb_image)
-
-    return new_argb_image.copy()
+    return new_argb_qimage.copy()
 
 
 def change_exposure(q_image, exposure_factor):
