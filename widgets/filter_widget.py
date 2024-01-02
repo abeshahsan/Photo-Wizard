@@ -31,12 +31,14 @@ class UI_FilterWidget(QWidget):
 
     def apply_filter(self, filter_name):
         try:
-            self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.scene_image,
+            self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.original_image,
                                                                                   self.filters[filter_name]["Contrast"])
             self.canvas_controller.scene_image = image_operations.change_exposure(self.canvas_controller.scene_image,
                                                                                   self.filters[filter_name]["Exposure"])
             self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.scene_image,
                                                                                 self.filters[filter_name]["Warmth"])
+            self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.scene_image,
+                                                                                 self.filters[filter_name]["Brightness"])
             # self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.scene_image,
             #                                                                         self.filters["vintage"][
             #                                                                             "saturation"])

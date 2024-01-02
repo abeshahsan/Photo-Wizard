@@ -274,12 +274,9 @@ def change_exposure(q_image, exposure_factor):
     # increase the exposure of the image and return a NEW image.
     # don't change the passed one
     numpy_array = q_image_to_numpy(q_image).astype(np.uint16)
-    print("Crashed 1")
     # Apply exposure adjustment to each RGB channel independently
     new_image = np.clip(numpy_array * exposure_factor, 0, 255).astype(np.uint8)
-    print("Crashed 2")
     new_image = numpy_to_q_image(new_image)
-    print("Crashed 3")
     return new_image.copy()
 
 
