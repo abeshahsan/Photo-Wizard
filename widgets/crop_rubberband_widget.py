@@ -57,7 +57,7 @@ class CropRubberBandWidget(QWidget):
         self.right = self.pos().x() + self.width()
         self.top = self.pos().y()
         self.bottom = self.pos().y() + self.height()
-        print(self.top, self.left, self.right, self.bottom)
+        print(self.top, self.bottom, self.right, self.left)
 
     def get_crop_dimensions(self):
         """

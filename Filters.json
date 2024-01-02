@@ -1,0 +1,19 @@
+{
+    "vintage":
+    {
+        "saturation": 1.5,
+        "contrast": 1.2,
+        "brightness": 10,
+        "exposure": 1.2,
+        "warmth": 1.2
+    },
+
+   "vintage2":
+    {
+        "saturation": 1.5,
+        "contrast": 1.2,
+        "brightness": 10,
+        "exposure": 1.2,
+        "warmth": 1.2
+    }
+}
