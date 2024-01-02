@@ -47,18 +47,9 @@ def crop(q_image, top, bottom, right, left):
     :param left: the starting column of the numpy array to crop
     :return: a copy of the cropped image
     """
-    numpy_array = q_image_to_numpy(q_image)
-
-    new_image = np.zeros_like(numpy_array, dtype=np.int8)
-    print(new_image.shape)
-    new_image = numpy_array[top:bottom, left:right, :]
-
-    print(top, bottom, right, left)
-    print(new_image.shape)
-
-    new_image = new_image.astype(np.uint8)
-    new_image = numpy_to_q_image(new_image)
-    return new_image
+    # crop the image and return a NEW image.
+    # don't change the provided one
+    return QImage()  # change the statement
 
 
 def blur(q_image):
@@ -173,7 +164,6 @@ def change_contrast(q_image, contrast_factor):
 
 
 def rgb_to_hsv(rgb_image):
-def rgb_to_hsv(rgb_image):
     """
     Convert RGB image to HSV color space.
     :param rgb_image: RGB image as a NumPy array
@@ -182,38 +172,7 @@ def rgb_to_hsv(rgb_image):
     input_shape = rgb_image.shape
     rgb_image = rgb_image.reshape(-1, 3)
     r, g, b = rgb_image[:, 0], rgb_image[:, 1], rgb_image[:, 2]
-    Convert RGB image to HSV color space.
-    :param rgb_image: RGB image as a NumPy array
-    :return: HSV image as a NumPy array
-    """
-    input_shape = rgb_image.shape
-    rgb_image = rgb_image.reshape(-1, 3)
-    r, g, b = rgb_image[:, 0], rgb_image[:, 1], rgb_image[:, 2]
 
-    maxc = np.maximum(np.maximum(r, g), b)
-    minc = np.minimum(np.minimum(r, g), b)
-    v = maxc
-
-    deltac = maxc - minc
-    np.seterr(invalid='ignore')
-    s = np.where(maxc != 0, deltac / maxc, 0)  # Avoid division by zero
-
-    deltac[deltac == 0] = 1  # to not divide by zero (those results in any way would be overridden in next lines)
-    rc = (maxc - r) / deltac
-    gc = (maxc - g) / deltac
-    bc = (maxc - b) / deltac
-
-    h = 4.0 + gc - rc
-    h[g == maxc] = 2.0 + rc[g == maxc] - bc[g == maxc]
-    h[r == maxc] = bc[r == maxc] - gc[r == maxc]
-    h[minc == maxc] = 0.0
-
-    h = (h / 6.0) % 1.0
-    res = np.dstack([h, s, v])
-    return res.reshape(input_shape)
-
-
-def hsv_to_rgb(hsv_image):
     maxc = np.maximum(np.maximum(r, g), b)
     minc = np.minimum(np.minimum(r, g), b)
     v = maxc
@@ -266,59 +225,25 @@ def hsv_to_rgb(hsv_image):
 
     return rgb.reshape(input_shape)
 
-    Convert HSV image to RGB color space.
-    :param hsv_image: HSV image as a NumPy array
-    :return: RGB image as a NumPy array
-    """
-    input_shape = hsv_image.shape
-    hsv_image = hsv_image.reshape(-1, 3)
-    h, s, v = hsv_image[:, 0], hsv_image[:, 1], hsv_image[:, 2]
-
-    i = np.int32(h * 6.0)
-    f = (h * 6.0) - i
-    p = v * (1.0 - s)
-    q = v * (1.0 - s * f)
-    t = v * (1.0 - s * (1.0 - f))
-    i = i % 6
-
-    rgb = np.zeros_like(hsv_image)
-    v, t, p, q = v.reshape(-1, 1), t.reshape(-1, 1), p.reshape(-1, 1), q.reshape(-1, 1)
-    rgb[i == 0] = np.hstack([v, t, p])[i == 0]
-    rgb[i == 1] = np.hstack([q, v, p])[i == 1]
-    rgb[i == 2] = np.hstack([p, v, t])[i == 2]
-    rgb[i == 3] = np.hstack([p, q, v])[i == 3]
-    rgb[i == 4] = np.hstack([t, p, v])[i == 4]
-    rgb[i == 5] = np.hstack([v, p, q])[i == 5]
-    rgb[s == 0.0] = np.hstack([v, v, v])[s == 0.0]
-
-    return rgb.reshape(input_shape)
-
 
 def change_saturation(q_image, saturation_factor):
-def change_saturation(q_image, saturation_factor):
     """
-    Changes the saturation of an image (PyQT6 QImage object) and returns a copy of the image.
     Changes the saturation of an image (PyQT6 QImage object) and returns a copy of the image.
     Does not affect the original.
     It converts it into a numpy array and performs saturation adjustment.
-    It converts it into a numpy array and performs saturation adjustment.
     :param q_image: QImage object
-    :param saturation_factor: Saturation factor (e.g., 1.5 for 1.5x saturation)
     :param saturation_factor: Saturation factor (e.g., 1.5 for 1.5x saturation)
     :return: a copy of the image with changed saturation
     saturation_factor within 1.0- 1.4
     """
     numpy_array = q_image_to_numpy(q_image)
-    numpy_array = q_image_to_numpy(q_image)
     hsv_image = rgb_to_hsv(numpy_array)
     hsv_image[:, :, 1] = np.clip(hsv_image[:, :, 1] * saturation_factor, 0, 1)
-    new_image = hsv_to_rgb(hsv_image)
-    new_image = new_image.astype(np.uint8)
-    new_image_q = numpy_to_q_image(new_image)
-    return new_image_q
+    new_image = hsv_to_rgb(hsv_image).astype(np.uint8)
+    new_image = numpy_to_q_image(new_image)
+    return new_image
 
 
-def change_exposure(q_image, exposure_factor):
 def change_exposure(q_image, exposure_factor):
     """
     Changes the exposure of an image (PyQT6 QImage object) and returns a copy of the image.
@@ -326,7 +251,6 @@ def change_exposure(q_image, exposure_factor):
     It converts it into a numpy array and performs some exposure operations.
     :param q_image: QImage object
     :return: a copy of the image with changed exposure
-    exposure_factor within 1.0 to 1.8
     exposure_factor within 1.0 to 1.8
     """
     # increase the exposure of the image and return a NEW image.
@@ -337,15 +261,8 @@ def change_exposure(q_image, exposure_factor):
     new_image = np.clip(numpy_array * exposure_factor, 0, 255).astype(np.uint8)
     new_image = numpy_to_q_image(new_image)
     return new_image
-    numpy_array = q_image_to_numpy(q_image).astype(np.int16)
-
-    # Apply exposure adjustment to each RGB channel independently
-    new_image = np.clip(numpy_array * exposure_factor, 0, 255).astype(np.uint8)
-    new_image = numpy_to_q_image(new_image)
-    return new_image
 
 
-def change_warmth(q_image, warmth_factor):
 def change_warmth(q_image, warmth_factor):
     """
     Changes the warmth of an image (PyQT6 QImage object) and returns a copy of the image.
@@ -366,7 +283,6 @@ def change_warmth(q_image, warmth_factor):
     new_image = numpy_to_q_image(new_image)
     return new_image
 
-
 """
 To test the functions above.
 """
@@ -377,7 +293,7 @@ if __name__ == '__main__':
     # Load the image
     image_path = "F:/PythonProject/Updated2/Kena.png"
     image = QImage(image_path)
-    blurred_image = change_saturation(image, 1.5)
+    blurred_image = change_saturation(image, 2.0)
     pixmap = QPixmap(blurred_image)
 
     # Check if the image was loaded successfully
