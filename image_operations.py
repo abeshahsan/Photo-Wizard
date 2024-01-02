@@ -291,7 +291,7 @@ if __name__ == '__main__':
     scene = QGraphicsScene()
 
     # Load the image
-    image_path = "F:/PythonProject/Updated2/Kena.png"
+    image_path = "F:/UNI_STUFF/5th Sem/Photo-Wizard/Kena.png"
     image = QImage(image_path)
     blurred_image = change_saturation(image, 2.0)
     pixmap = QPixmap(blurred_image)

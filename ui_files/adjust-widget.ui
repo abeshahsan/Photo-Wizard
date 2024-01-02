@@ -104,6 +104,12 @@
           </item>
           <item>
            <widget class="QSlider" name="contrast_slider">
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>22</number>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -118,6 +124,15 @@
           </item>
           <item>
            <widget class="QSlider" name="saturation_slider">
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>14</number>
+            </property>
+            <property name="tracking">
+             <bool>true</bool>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -132,8 +147,20 @@
           </item>
           <item>
            <widget class="QSlider" name="exposure_slider">
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>18</number>
+            </property>
+            <property name="singleStep">
+             <number>1</number>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="tickInterval">
+             <number>1</number>
             </property>
            </widget>
           </item>
@@ -146,6 +173,15 @@
           </item>
           <item>
            <widget class="QSlider" name="warmth_slider">
+            <property name="minimum">
+             <number>10</number>
+            </property>
+            <property name="maximum">
+             <number>12</number>
+            </property>
+            <property name="pageStep">
+             <number>0</number>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>

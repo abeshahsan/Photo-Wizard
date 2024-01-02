@@ -27,6 +27,9 @@ class UI_AdjustWidget(QWidget):
         self.sharpen_slider.valueChanged.connect(self.sharpen)
         self.contrast_slider.valueChanged.connect(self.contrast)
         self.brightness_slider.valueChanged.connect(self.brightness)
+        self.saturation_slider.valueChanged.connect(self.saturation)
+        self.warmth_slider.valueChanged.connect(self.warmth)
+        self.exposure_slider.valueChanged.connect(self.exposure)
 
     def blur(self):
         self.canvas_controller.scene_image = image_operations.blur(self.canvas_controller.original_image)
@@ -37,19 +40,30 @@ class UI_AdjustWidget(QWidget):
         self.canvas_controller.scene_image_updated.value = True
 
     def contrast(self):
-        self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.original_image)
+        self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.original_image,
+                                                                              self.contrast_slider.value() / 10.0)
+
+        print(self.contrast_slider.value())
         self.canvas_controller.scene_image_updated.value = True
 
     def brightness(self):
-        self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.original_image)
+        self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.original_image,
+                                                                                self.brightness_slider.value())
         self.canvas_controller.scene_image_updated.value = True
 
     def warmth(self):
-        self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.original_image)
+        self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.original_image,
+                                                                            self.warmth_slider.value())
         self.canvas_controller.scene_image_updated.value = True
 
     def saturation(self):
-        self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.original_image)
+        self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.original_image,
+                                                                                self.saturation_slider.value() / 10.0)
+        self.canvas_controller.scene_image_updated.value = True
+
+    def exposure(self):
+        self.canvas_controller.scene_image = image_operations.change_exposure(self.canvas_controller.original_image,
+                                                                              self.exposure_slider.value() / 10.0)
         self.canvas_controller.scene_image_updated.value = True
 
 
