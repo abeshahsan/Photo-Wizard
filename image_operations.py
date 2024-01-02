@@ -19,7 +19,7 @@ def q_image_to_numpy(q_image):
     buffer = q_image.constBits().asarray(height * width * 4)  # Assuming 4 bytes per pixel (RGBA)
     arr = np.frombuffer(buffer, np.uint8).reshape((height, width, 4))  # Reshape buffer to image dimensions
     
-    return arr[:, :, :3].copy()  # Return RGB channels and make a copy
+    return arr.copy()  # Return a copy to include the alpha channel
 
 
 def numpy_to_q_image(numpy_array):
@@ -30,8 +30,8 @@ def numpy_to_q_image(numpy_array):
     """
     height, width, channel = numpy_array.shape
     bytes_per_line = width * channel  # Calculate bytes per line
-    # Create QImage from NumPy array data with RGB channels
-    q_img = QImage(numpy_array.data, width, height, bytes_per_line, QImage.Format.Format_BGR888)
+    # Create QImage from NumPy array data with RGBA channels
+    q_img = QImage(numpy_array.data, width, height, bytes_per_line, QImage.Format.Format_ARGB32)
     return q_img.copy()  # Return a copy to prevent memory issues
 
 
@@ -149,33 +149,35 @@ def change_brightness(q_image, brightness_factor):
 def change_contrast(q_image, contrast_factor):
     """
     Changes the brightness of an image (PyQT6 QImage object) and returns a copy of the image.
-    Does not affect the original.\n
+    Does not affect the original.
     It converts it into a numpy array and performs some contrast operations.
     :param q_image: QImage object
     :return: a copy of the image with changed contrast
     contrast_factor within 1.0 to 2.2
     """
-    numpy_array = q_image_to_numpy(q_image).astype(np.int16)
+    numpy_array = q_image_to_numpy(q_image).astype(np.float32)  # Convert to float32
 
     # Apply contrast adjustment to each RGB channel independently
     new_image = np.clip(((numpy_array - 128) * contrast_factor) + 128, 0, 255).astype(np.uint8)
-    new_image = numpy_to_q_image(new_image)
-    new_image = np.clip(new_image, 0, 255)
-    return new_image.copy()
+
+    # Convert NumPy array back to QImage
+    new_image_qimage = numpy_to_q_image(new_image)
+
+    return new_image_qimage.copy()
 
 
-def rgb_to_hsv(rgb_image):
+def rgba_to_hsv(rgba_image):
     """
-    Convert RGB image to HSV color space.
-    :param rgb_image: RGB image as a NumPy array
+    Convert RGBA image to HSV color space.
+    :param rgba_image: RGBA image as a NumPy array
     :return: HSV image as a NumPy array
     """
-    input_shape = rgb_image.shape
-    rgb_image = rgb_image.reshape(-1, 3)
-    r, g, b = rgb_image[:, 0], rgb_image[:, 1], rgb_image[:, 2]
+    input_shape = rgba_image.shape
+    rgba_image = rgba_image.reshape(-1, 4)
+    red, green, blue, alpha = rgba_image[:, 0], rgba_image[:, 1], rgba_image[:, 2], rgba_image[:, 3]
 
-    maxc = np.maximum(np.maximum(r, g), b)
-    minc = np.minimum(np.minimum(r, g), b)
+    maxc = np.maximum(np.maximum(red, green), blue)
+    minc = np.minimum(np.minimum(red, green), blue)
     v = maxc
 
     deltac = maxc - minc
@@ -183,29 +185,29 @@ def rgb_to_hsv(rgb_image):
     s = np.where(maxc != 0, deltac / maxc, 0)  # Avoid division by zero
 
     deltac[deltac == 0] = 1  # to not divide by zero (those results in any way would be overridden in next lines)
-    rc = (maxc - r) / deltac
-    gc = (maxc - g) / deltac
-    bc = (maxc - b) / deltac
+    rc = (maxc - red) / deltac
+    gc = (maxc - green) / deltac
+    bc = (maxc - blue) / deltac
 
     h = 4.0 + gc - rc
-    h[g == maxc] = 2.0 + rc[g == maxc] - bc[g == maxc]
-    h[r == maxc] = bc[r == maxc] - gc[r == maxc]
+    h[green == maxc] = 2.0 + rc[green == maxc] - bc[green == maxc]
+    h[red == maxc] = bc[red == maxc] - gc[red == maxc]
     h[minc == maxc] = 0.0
 
     h = (h / 6.0) % 1.0
-    res = np.dstack([h, s, v])
+    res = np.dstack([h, s, v, alpha])
     return res.reshape(input_shape)
 
 
-def hsv_to_rgb(hsv_image):
+def hsv_to_rgba(hsv_image):
     """
-    Convert HSV image to RGB color space.
+    Convert HSV image to RGBA color space.
     :param hsv_image: HSV image as a NumPy array
-    :return: RGB image as a NumPy array
+    :return: RGBA image as a NumPy array
     """
     input_shape = hsv_image.shape
-    hsv_image = hsv_image.reshape(-1, 3)
-    h, s, v = hsv_image[:, 0], hsv_image[:, 1], hsv_image[:, 2]
+    hsv_image = hsv_image.reshape(-1, 4)
+    h, s, v, alpha = hsv_image[:, 0], hsv_image[:, 1], hsv_image[:, 2], hsv_image[:, 3]
 
     i = np.int32(h * 6.0)
     f = (h * 6.0) - i
@@ -214,36 +216,56 @@ def hsv_to_rgb(hsv_image):
     t = v * (1.0 - s * (1.0 - f))
     i = i % 6
 
-    rgb = np.zeros_like(hsv_image)
+    rgba = np.zeros_like(hsv_image)
     v, t, p, q = v.reshape(-1, 1), t.reshape(-1, 1), p.reshape(-1, 1), q.reshape(-1, 1)
-    rgb[i == 0] = np.hstack([v, t, p])[i == 0]
-    rgb[i == 1] = np.hstack([q, v, p])[i == 1]
-    rgb[i == 2] = np.hstack([p, v, t])[i == 2]
-    rgb[i == 3] = np.hstack([p, q, v])[i == 3]
-    rgb[i == 4] = np.hstack([t, p, v])[i == 4]
-    rgb[i == 5] = np.hstack([v, p, q])[i == 5]
-    rgb[s == 0.0] = np.hstack([v, v, v])[s == 0.0]
+    rgba[i == 0] = np.hstack([v, t, p, alpha])[i == 0]
+    rgba[i == 1] = np.hstack([q, v, p, alpha])[i == 1]
+    rgba[i == 2] = np.hstack([p, v, t, alpha])[i == 2]
+    rgba[i == 3] = np.hstack([p, q, v, alpha])[i == 3]
+    rgba[i == 4] = np.hstack([t, p, v, alpha])[i == 4]
+    rgba[i == 5] = np.hstack([v, p, q, alpha])[i == 5]
+    rgba[s == 0.0] = np.hstack([v, v, v, alpha])[s == 0.0]
 
-    return rgb.reshape(input_shape)
+    return rgba.reshape(input_shape)
 
 
-def change_saturation(q_image, saturation_factor):
+def change_saturation(argb_image, saturation_factor):
     """
     Changes the saturation of an image (PyQT6 QImage object) and returns a copy of the image.
     Does not affect the original.
     It converts it into a numpy array and performs saturation adjustment.
-    :param q_image: QImage object
+    :param argb_image: ARGB image as a NumPy array
     :param saturation_factor: Saturation factor (e.g., 1.5 for 1.5x saturation)
     :return: a copy of the image with changed saturation
-    saturation_factor within 1.0- 1.4
+    saturation_factor within 1.0-1.4
     """
-    numpy_array = q_image_to_numpy(q_image)
-    hsv_image = rgb_to_hsv(numpy_array)
+    argb_image = q_image_to_numpy(argb_image)
+    input_shape = argb_image.shape
+    alpha, red, green, blue = argb_image[:, :, 0], argb_image[:, :, 1], argb_image[:, :, 2], argb_image[:, :, 3]
+
+    # Convert ARGB to RGBA for HSV conversion
+    rgba_image = np.dstack([red, green, blue, alpha])
+
+    # Convert RGBA to HSV
+    hsv_image = rgba_to_hsv(rgba_image)
+
+    # Apply saturation adjustment
     hsv_image[:, :, 1] = np.clip(hsv_image[:, :, 1] * saturation_factor, 0, 1)
-    new_image = hsv_to_rgb(hsv_image).astype(np.uint8)
-    new_image = np.clip(new_image, 0, 255)
-    new_image = numpy_to_q_image(new_image)
-    return new_image.copy()
+
+    # Convert HSV back to RGBA
+    new_rgba_image = hsv_to_rgba(hsv_image)
+
+    # Extract ARGB channels
+    new_alpha, new_red, new_green, new_blue = new_rgba_image[:, :, 3], new_rgba_image[:, :, 0], new_rgba_image[:, :, 1], new_rgba_image[:, :, 2]
+
+    # Stack ARGB channels
+    new_argb_image = np.dstack([new_alpha, new_red, new_green, new_blue])
+
+    new_argb_image = new_argb_image.reshape(input_shape)
+
+    new_argb_image = numpy_to_q_image(new_argb_image)
+
+    return new_argb_image.copy()
 
 
 def change_exposure(q_image, exposure_factor):
@@ -270,22 +292,29 @@ def change_exposure(q_image, exposure_factor):
 def change_warmth(q_image, warmth_factor):
     """
     Changes the warmth of an image (PyQT6 QImage object) and returns a copy of the image.
-    Does not affect the original.\n
+    Does not affect the original.
     It converts it into a numpy array and performs some warmth operations.
     :param q_image: QImage object
+    :param warmth_factor: Warmth factor (e.g., 1.0 for no change)
     :return: a copy of the image with changed warmth
     warmth_factor within 1.0-1.2
     """
-    numpy_array = q_image_to_numpy(q_image).astype(np.int16)
-    new_image = np.zeros_like(numpy_array, dtype=np.int16)
+    numpy_array = q_image_to_numpy(q_image).astype(np.float32)
 
+    # Apply warmth adjustment to each RGB channel independently
+    new_image = np.zeros_like(numpy_array)
     new_image[:, :, 0] = numpy_array[:, :, 0] / warmth_factor
     new_image[:, :, 1] = numpy_array[:, :, 1]
     new_image[:, :, 2] = numpy_array[:, :, 2] * warmth_factor
+    new_image[:, :, 3] = numpy_array[:, :, 3]  # Preserve the alpha channel
+
     # Clip values to be within the valid range [0, 255]
     new_image = np.clip(new_image, 0, 255).astype(np.uint8)
-    new_image = numpy_to_q_image(new_image)
-    return new_image.copy()
+
+    # Convert NumPy array back to QImage
+    new_image_qimage = numpy_to_q_image(new_image)
+
+    return new_image_qimage.copy()
 
 """
 To test the functions above.

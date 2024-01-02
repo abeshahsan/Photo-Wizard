@@ -31,15 +31,10 @@ class UI_FilterWidget(QWidget):
 
     def apply_filter(self, filter_name):
         try:
-            self.canvas_controller.scene_image = image_operations.change_exposure(self.canvas_controller.scene_image, 2.0)
-            
-            # self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.scene_image, self.filters["vintage"]["saturation"])
-            # self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.scene_image, self.filters["vintage"]["contrast"])
-            
-            # self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.scene_image, 1.2)
-            
-            # print("Crashed 2")
-            # self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.scene_image, self.filters["vintage"]["warmth"])
+            self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.scene_image, self.filters["vintage"]["contrast"])
+            self.canvas_controller.scene_image = image_operations.change_exposure(self.canvas_controller.scene_image, self.filters["vintage"]["exposure"])
+            self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.scene_image, self.filters["vintage"]["warmth"])
+            self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.scene_image, self.filters["vintage"]["saturation"])
             self.canvas_controller.scene_image_updated.value = True
         except Exception as e:
             print(e)
