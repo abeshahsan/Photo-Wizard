@@ -153,15 +153,12 @@ def change_contrast(q_image, contrast_factor):
     It converts it into a numpy array and performs some contrast operations.
     :param q_image: QImage object
     :return: a copy of the image with changed contrast
+    contrast_factor within 1.0 to 2.2
     """
-    numpy_array = q_image_to_numpy(q_image)
-    new_image = np.zeros_like(numpy_array, dtype=np.float32)
-    # contrast_factor = 2.2  # within 1.0-2.2
-    for y in range(numpy_array.shape[0]):
-        for x in range(numpy_array.shape[1]):
-            for c in range(numpy_array.shape[2]):
-                new_image[y, x, c] = np.clip(((numpy_array[y, x, c] - 128) * contrast_factor) + 128, 0, 255)
-    new_image = new_image.astype(np.uint8)
+    numpy_array = q_image_to_numpy(q_image).astype(np.int16)
+
+    # Apply contrast adjustment to each RGB channel independently
+    new_image = np.clip(((numpy_array - 128) * contrast_factor) + 128, 0, 255).astype(np.uint8)
     new_image = numpy_to_q_image(new_image)
     return new_image
 
@@ -237,14 +234,14 @@ def change_saturation(q_image, saturation_factor):
     :param q_image: QImage object
     :param saturation_factor: Saturation factor (e.g., 1.5 for 1.5x saturation)
     :return: a copy of the image with changed saturation
+    saturation_factor within 1.0- 1.4
     """
     numpy_array = q_image_to_numpy(q_image)
     hsv_image = rgb_to_hsv(numpy_array)
     hsv_image[:, :, 1] = np.clip(hsv_image[:, :, 1] * saturation_factor, 0, 1)
-    new_image = hsv_to_rgb(hsv_image)
-    new_image = new_image.astype(np.uint8)
-    new_image_q = numpy_to_q_image(new_image)
-    return new_image_q
+    new_image = hsv_to_rgb(hsv_image).astype(np.uint8)
+    new_image = numpy_to_q_image(new_image)
+    return new_image
 
 
 def change_exposure(q_image, exposure_factor):
@@ -254,20 +251,17 @@ def change_exposure(q_image, exposure_factor):
     It converts it into a numpy array and performs some exposure operations.
     :param q_image: QImage object
     :return: a copy of the image with changed exposure
+    exposure_factor within 1.0 to 1.8
     """
     # increase the exposure of the image and return a NEW image.
     # don't change the passed one
-    numpy_array = q_image_to_numpy(q_image)
-    new_image = np.zeros_like(numpy_array, dtype=np.float32)
-    # exposure_factor = 1.3  # within 1.0- 1.8
-    for y in range(numpy_array.shape[0]):
-        for x in range(numpy_array.shape[1]):
-            for c in range(numpy_array.shape[2]):
-                new_image[y, x, c] = np.clip(numpy_array[y, x, c] * exposure_factor, 0, 255)
+    numpy_array = q_image_to_numpy(q_image).astype(np.int16)
 
-    new_image = new_image.astype(np.uint8)
+    # Apply exposure adjustment to each RGB channel independently
+    new_image = np.clip(numpy_array * exposure_factor, 0, 255).astype(np.uint8)
     new_image = numpy_to_q_image(new_image)
     return new_image
+
 
 def change_warmth(q_image, warmth_factor):
     """
@@ -276,26 +270,18 @@ def change_warmth(q_image, warmth_factor):
     It converts it into a numpy array and performs some warmth operations.
     :param q_image: QImage object
     :return: a copy of the image with changed warmth
+    warmth_factor within 1.0-1.2
     """
-    # increase the warmth of the image and return a NEW image.
-    # don't change the passed one
-    numpy_array = q_image_to_numpy(q_image)
-    new_image = np.zeros_like(numpy_array, dtype=np.float32)
-    # warmth_factor = 1.1  # 1.0-1.3 for warmth
+    numpy_array = q_image_to_numpy(q_image).astype(np.int16)
+    new_image = np.zeros_like(numpy_array, dtype=np.int16)
 
-    # Modify warmth by adjusting the red and blue channels
-    for y in range(numpy_array.shape[0]):
-        for x in range(numpy_array.shape[1]):
-            new_image[y, x, 0] = numpy_array[y, x, 0] / warmth_factor
-            new_image[y, x, 1] = numpy_array[y, x, 1]
-            new_image[y, x, 2] = numpy_array[y, x, 2] * warmth_factor
-            # new_image[y, x, 0] *= original_red_intensity / np.mean(numpy_array[y, x, 0])
-
+    new_image[:, :, 0] = numpy_array[:, :, 0] / warmth_factor
+    new_image[:, :, 1] = numpy_array[:, :, 1]
+    new_image[:, :, 2] = numpy_array[:, :, 2] * warmth_factor
     # Clip values to be within the valid range [0, 255]
     new_image = np.clip(new_image, 0, 255).astype(np.uint8)
     new_image = numpy_to_q_image(new_image)
     return new_image
-
 
 """
 To test the functions above.
