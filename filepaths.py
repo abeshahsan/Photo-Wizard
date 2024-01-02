@@ -7,6 +7,8 @@ class Filepaths:
     __TEMP = 'ui_files/untitled.ui'
     __VIEW_TOOLBAR = 'ui_files/view_toolbar.ui'
     __EDIT_TOOLBAR = 'ui_files/edit_toolbar.ui'
+    __FILTER_WIDGET = 'ui_files/filter_widget.ui'
+    __FILTER_FILE = 'Filters.json'
 
     @staticmethod
     def MAIN_WINDOW():
@@ -27,6 +29,14 @@ class Filepaths:
     @staticmethod
     def EDIT_TOOLBAR():
         return os.path.abspath(Filepaths.__EDIT_TOOLBAR)
+    
+    @staticmethod
+    def FILTER_WIDGET():
+        return os.path.abspath(Filepaths.__FILTER_WIDGET)
+    
+    @staticmethod
+    def FILTER_FILE():
+        return os.path.abspath(Filepaths.__FILTER_FILE)
 
 
 if __name__ == '__main__':
