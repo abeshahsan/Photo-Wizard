@@ -39,9 +39,9 @@ class UI_FilterWidget(QWidget):
                                                                                 self.filters[filter_name]["Warmth"])
             self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.scene_image,
                                                                                  self.filters[filter_name]["Brightness"])
-            # self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.scene_image,
-            #                                                                         self.filters["vintage"][
-            #                                                                             "saturation"])
+            self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.scene_image,
+                                                                                    self.filters[filter_name][
+                                                                                         "Saturation"])
             self.canvas_controller.scene_image_updated.value = True
         except Exception as e:
             print(e)
