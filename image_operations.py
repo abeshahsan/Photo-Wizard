@@ -217,7 +217,8 @@ def hsv_to_rgba(hsv_image):
     i = i % 6
 
     rgba = np.zeros_like(hsv_image)
-    v, t, p, q = v.reshape(-1, 1), t.reshape(-1, 1), p.reshape(-1, 1), q.reshape(-1, 1)
+    v, t, p, q, alpha = v.reshape(-1, 1), t.reshape(-1, 1), p.reshape(-1, 1), q.reshape(-1, 1), alpha.reshape(-1, 1)
+
     rgba[i == 0] = np.hstack([v, t, p, alpha])[i == 0]
     rgba[i == 1] = np.hstack([q, v, p, alpha])[i == 1]
     rgba[i == 2] = np.hstack([p, v, t, alpha])[i == 2]
@@ -227,6 +228,7 @@ def hsv_to_rgba(hsv_image):
     rgba[s == 0.0] = np.hstack([v, v, v, alpha])[s == 0.0]
 
     return rgba.reshape(input_shape)
+
 
 
 def change_saturation(argb_image, saturation_factor):
@@ -240,9 +242,12 @@ def change_saturation(argb_image, saturation_factor):
     saturation_factor within 1.0-1.4
     """
     argb_image = q_image_to_numpy(argb_image)
+    input_shape = argb_image.shape
+    alpha, red, green, blue = argb_image[:, :, 0], argb_image[:, :, 1], argb_image[:, :, 2], argb_image[:, :, 3]
+
 
     # Convert ARGB to RGBA for HSV conversion
-    rgba_image = argb_image[:, :, [1, 2, 3, 0]]
+    rgba_image = np.dstack([red, green, blue, alpha])
 
     # Convert RGBA to HSV
     hsv_image = rgba_to_hsv(rgba_image)
@@ -253,14 +258,18 @@ def change_saturation(argb_image, saturation_factor):
     # Convert HSV back to RGBA
     new_rgba_image = hsv_to_rgba(hsv_image)
 
-    # Extract ARGB channels
-    new_argb_image = new_rgba_image[:, :, [3, 0, 1, 2]]
+    # Stack ARGB channels
+    new_argb_image = np.dstack([new_rgba_image[:, :, 3], new_rgba_image[:, :, 0], new_rgba_image[:, :, 1], new_rgba_image[:, :, 2]])
 
-    # Convert NumPy array back to QImage
-    new_argb_qimage = numpy_to_q_image(new_argb_image)
+    # Reshape to the original input shape
+    new_argb_image = new_argb_image.reshape(input_shape)
 
-    return new_argb_qimage.copy()
+    new_argb_image = new_argb_image.astype(np.uint8)
 
+    # Convert the resulting numpy array back to QImage
+    new_qimage = numpy_to_q_image(new_argb_image)
+
+    return new_qimage.copy()
 
 def change_exposure(q_image, exposure_factor):
     """
@@ -318,7 +327,7 @@ if __name__ == '__main__':
     # Load the image
     image_path = "F:/UNI_STUFF/5th Sem/Photo-Wizard/Kena.png"
     image = QImage(image_path)
-    blurred_image = change_exposure(image, 2.0)
+    blurred_image = change_saturation(image, 0.8)
     pixmap = QPixmap(blurred_image)
 
     # Check if the image was loaded successfully
