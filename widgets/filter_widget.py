@@ -10,6 +10,8 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
+from widgets.filter_input_dialog import UI_FilterInputDialog
+
 
 class UI_FilterWidget(QWidget):
     def __init__(self, canvas_controller):
@@ -22,6 +24,8 @@ class UI_FilterWidget(QWidget):
         self.canvas_controller = canvas_controller
 
         self.add_filter_buttons()
+
+        self.filter_input_dialog = None
 
     def event_clicked_on_vintage(self):
         sender_button = self.sender()
@@ -38,7 +42,8 @@ class UI_FilterWidget(QWidget):
             self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.scene_image,
                                                                                 self.filters[filter_name]["Warmth"])
             self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.scene_image,
-                                                                                 self.filters[filter_name]["Brightness"])
+                                                                                    self.filters[filter_name][
+                                                                                        "Brightness"])
             # self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.scene_image,
             #                                                                         self.filters["vintage"][
             #                                                                             "saturation"])
@@ -62,10 +67,30 @@ class UI_FilterWidget(QWidget):
             button.setObjectName(filer_name)
             button.clicked.connect(self.event_clicked_on_vintage)
             self.filter_area.widget().layout().addWidget(button)
+        button = QPushButton("Add New Filter")
+        button.clicked.connect(self.open_filter_input_dialog)
+        self.filter_area.widget().layout().addWidget(button)
+
+    def open_filter_input_dialog(self):
+        self.filter_input_dialog = UI_FilterInputDialog()
+        self.filter_input_dialog.save_button.clicked.connect(self.event_click_save_button)
+        self.filter_input_dialog.show()
+
+    def event_click_save_button(self):
+        self.filters[self.filter_input_dialog.filter_name] = {
+            "Saturation": float(self.filter_input_dialog.saturation.text()),
+            "Brightness": float(self.filter_input_dialog.brightness.text()),
+            "Contrast": float(self.filter_input_dialog.contrast.text()),
+            "Warmth": float(self.filter_input_dialog.warmth.text()),
+            "Exposure": float(self.filter_input_dialog.exposure.text())
+        }
+        print(self.filters[self.filter_input_dialog.filter_name])
+
+        self.filter_input_dialog.close()
 
 
 if __name__ == "__main__":
     app = QApplication([])
-    widget = UI_FilterWidget()
+    widget = UI_FilterWidget(None)
     widget.show()
     app.exec()

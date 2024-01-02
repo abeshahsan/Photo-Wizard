@@ -196,6 +196,7 @@ class UI_MainWindow(QMainWindow):
         self.add_adjust_widget()
         self.remove_crop_rubberband()
         self.remove_filter_widget()
+        self.editor_container.setStretch(0, 1)
         self.canvas_controller.scene_image_updated.value = True
 
     def event_clicked_on_cancel_button(self):
@@ -204,6 +205,7 @@ class UI_MainWindow(QMainWindow):
         self.remove_crop_rubberband()
         self.remove_filter_widget()
         self.add_view_toolbar_widget()
+        self.canvas_controller.scene_image = self.canvas_controller.original_image
         self.canvas_controller.scene_image_updated.value = True
 
     def event_clicked_on_crop_button(self):
