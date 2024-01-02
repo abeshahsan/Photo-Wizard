@@ -17,24 +17,29 @@ class UI_FilterWidget(QWidget):
         uic.loadUi(Filepaths.FILTER_WIDGET(), self)
 
         self.main_widget = self.findChild(QWidget, "main_widget")
-        self.vintage_filter = self.findChild(QPushButton, "vintage")
+        self.filter_area = self.findChild(QScrollArea, "scrollArea")
         self.filters = self.read_filters(Filepaths.FILTER_FILE())
         self.canvas_controller = canvas_controller
 
-        self.vintage_filter.clicked.connect(self.event_clicked_on_vintage)
+        self.add_filter_buttons()
 
     def event_clicked_on_vintage(self):
         sender_button = self.sender()
         button_name = sender_button.objectName()
         print(f"The button '{button_name}' was clicked.")
-        self.apply_filter("")
+        self.apply_filter(button_name)
 
     def apply_filter(self, filter_name):
         try:
-            self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.scene_image, self.filters["vintage"]["contrast"])
-            self.canvas_controller.scene_image = image_operations.change_exposure(self.canvas_controller.scene_image, self.filters["vintage"]["exposure"])
-            self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.scene_image, self.filters["vintage"]["warmth"])
-            self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.scene_image, self.filters["vintage"]["saturation"])
+            self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.scene_image,
+                                                                                  self.filters[filter_name]["Contrast"])
+            self.canvas_controller.scene_image = image_operations.change_exposure(self.canvas_controller.scene_image,
+                                                                                  self.filters[filter_name]["Exposure"])
+            self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.scene_image,
+                                                                                self.filters[filter_name]["Warmth"])
+            # self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.scene_image,
+            #                                                                         self.filters["vintage"][
+            #                                                                             "saturation"])
             self.canvas_controller.scene_image_updated.value = True
         except Exception as e:
             print(e)
@@ -48,7 +53,13 @@ class UI_FilterWidget(QWidget):
         with open(file_path, 'r') as json_file:
             params = json.load(json_file)
         return params
-    
+
+    def add_filter_buttons(self):
+        for filer_name in self.filters.keys():
+            button = QPushButton(filer_name)
+            button.setObjectName(filer_name)
+            button.clicked.connect(self.event_clicked_on_vintage)
+            self.filter_area.widget().layout().addWidget(button)
 
 
 if __name__ == "__main__":

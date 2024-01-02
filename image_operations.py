@@ -18,7 +18,7 @@ def q_image_to_numpy(q_image):
     # Convert QImage to a format compatible with NumPy
     buffer = q_image.constBits().asarray(height * width * 4)  # Assuming 4 bytes per pixel (RGBA)
     arr = np.frombuffer(buffer, np.uint8).reshape((height, width, 4))  # Reshape buffer to image dimensions
-    
+
     return arr.copy()  # Return a copy to include the alpha channel
 
 
@@ -256,7 +256,9 @@ def change_saturation(argb_image, saturation_factor):
     new_rgba_image = hsv_to_rgba(hsv_image)
 
     # Extract ARGB channels
-    new_alpha, new_red, new_green, new_blue = new_rgba_image[:, :, 3], new_rgba_image[:, :, 0], new_rgba_image[:, :, 1], new_rgba_image[:, :, 2]
+    new_alpha, new_red, new_green, new_blue = new_rgba_image[:, :, 3], new_rgba_image[:, :, 0], new_rgba_image[:, :,
+                                                                                                1], new_rgba_image[:, :,
+                                                                                                    2]
 
     # Stack ARGB channels
     new_argb_image = np.dstack([new_alpha, new_red, new_green, new_blue])
@@ -315,6 +317,7 @@ def change_warmth(q_image, warmth_factor):
     new_image_qimage = numpy_to_q_image(new_image)
 
     return new_image_qimage.copy()
+
 
 """
 To test the functions above.
