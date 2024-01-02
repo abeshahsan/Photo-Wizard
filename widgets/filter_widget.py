@@ -18,9 +18,11 @@ class UI_FilterWidget(QWidget):
         super(UI_FilterWidget, self).__init__()
         uic.loadUi(Filepaths.FILTER_WIDGET(), self)
 
+        self.filters = None
+
         self.main_widget = self.findChild(QWidget, "main_widget")
         self.filter_area = self.findChild(QScrollArea, "scrollArea")
-        self.filters = self.read_filters(Filepaths.FILTER_FILE())
+        self.read_filters(Filepaths.FILTER_FILE())
         self.canvas_controller = canvas_controller
 
         self.add_filter_buttons()
@@ -42,23 +44,23 @@ class UI_FilterWidget(QWidget):
             self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.scene_image,
                                                                                 self.filters[filter_name]["Warmth"])
             self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.scene_image,
-                                                                                 self.filters[filter_name]["Brightness"])
+                                                                                    self.filters[filter_name][
+                                                                                        "Brightness"])
             self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.scene_image,
                                                                                     self.filters[filter_name][
-                                                                                         "Saturation"])
+                                                                                        "Saturation"])
             self.canvas_controller.scene_image_updated.value = True
         except Exception as e:
             print(e)
 
-    def write_filters(self, file_path, params):
+    def write_filters(self, file_path):
         with open(file_path, 'w') as json_file:
-            json.dump(params, json_file, indent=4)
+            json.dump(self.filters, json_file, indent=4)
         print(f"Vintage filter parameters saved to {file_path}")
 
     def read_filters(self, file_path):
         with open(file_path, 'r') as json_file:
-            params = json.load(json_file)
-        return params
+            self.filters = json.load(json_file)
 
     def add_filter_buttons(self):
         for filer_name in self.filters.keys():
@@ -76,14 +78,14 @@ class UI_FilterWidget(QWidget):
         self.filter_input_dialog.show()
 
     def event_click_save_button(self):
-        self.filters[self.filter_input_dialog.filter_name] = {
+        self.filters[self.filter_input_dialog.filter_name.text()] = {
             "Saturation": float(self.filter_input_dialog.saturation.text()),
             "Brightness": float(self.filter_input_dialog.brightness.text()),
             "Contrast": float(self.filter_input_dialog.contrast.text()),
             "Warmth": float(self.filter_input_dialog.warmth.text()),
             "Exposure": float(self.filter_input_dialog.exposure.text())
         }
-        print(self.filters[self.filter_input_dialog.filter_name])
+        print(self.filters)
 
         self.filter_input_dialog.close()
 
