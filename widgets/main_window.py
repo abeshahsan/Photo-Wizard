@@ -145,7 +145,6 @@ class UI_MainWindow(QMainWindow):
         self.scene = QGraphicsScene()
         self.scene.addPixmap(self.scene_pixmap)
         pixmap_item = QGraphicsPixmapItem(self.scene_pixmap)
-        print(pixmap_item.scenePos())
         self.canvas.setScene(self.scene)
         self.canvas_controller.scene_image_updated.value = False
 
