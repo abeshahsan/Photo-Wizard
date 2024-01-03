@@ -10,11 +10,13 @@ class CropRubberBandWidget(QWidget):
     \n It contains a rubber-band (QRubberBand), A QHBoxLayout with some QSizeGrip to resize the itself.
     """
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, canvas_controller=None):
         # Initialize the super class QWidget
         super(CropRubberBandWidget, self).__init__(parent=parent)
         # Make the Rubberband a sub-window
         self.setWindowFlag(Qt.WindowType.SubWindow)
+
+        self.canvas_controller = canvas_controller
 
         # Create a layout and make the CropRubberBandWidget as its parent
         layout = QHBoxLayout(self)
@@ -53,11 +55,12 @@ class CropRubberBandWidget(QWidget):
             self.mouse_event_previous_pos = QCursor.pos()
 
     def update_crop_dimensions(self):
-        self.left = self.pos().x()
-        self.right = self.pos().x() + self.width()
+        diff = (self.parent().width() - self.canvas_controller.scene_image.width()) // 2
+        print(diff)
+        self.left = self.pos().x() - diff
+        self.right = self.pos().x() + self.width() - diff
         self.top = self.pos().y()
         self.bottom = self.pos().y() + self.height()
-        print(self.top, self.bottom, self.right, self.left)
 
     def get_crop_dimensions(self):
         """

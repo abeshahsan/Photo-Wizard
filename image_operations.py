@@ -48,9 +48,16 @@ def crop(q_image, top, bottom, right, left):
     :param left: the starting column of the numpy array to crop
     :return: a copy of the cropped image
     """
+    print(q_image.size())
+    numpy_array = q_image_to_numpy(q_image).astype(np.uint8)
+    new_image = numpy_array[top:bottom, left:right]
+
+    new_image = new_image.astype(np.uint8)
+    new_image = numpy_to_q_image(new_image)
+
     # crop the image and return a NEW image.
     # don't change the provided one
-    return QImage()  # change the statement
+    return new_image.copy()  # change the statement
 
 
 def blur(q_image):
