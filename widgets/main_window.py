@@ -12,7 +12,7 @@ from widgets.edit_toolbar import UI_EditToolbarWidget
 from widgets.view_toolbar import UI_ViewToolbarWidget
 from widgets.filter_widget import UI_FilterWidget
 
-
+    
 class UI_MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -60,6 +60,7 @@ class UI_MainWindow(QMainWindow):
         self.edit_toolbar_widget.save_button.clicked.connect(self.save_button_clicked_on_edit_toolbar)
         self.edit_toolbar_widget.filter_button.clicked.connect(self.event_clicked_on_filter_button)
         # self.cancel_button.clicked.connect(self.load_adjust_widget)
+
 
     def choose_file(self):
         """
@@ -144,9 +145,6 @@ class UI_MainWindow(QMainWindow):
         if not self.canvas_controller.scene_image_updated:
             return
         print(self.canvas.size())
-        self.canvas.updateGeometry()
-        print(self.canvas.size())
-        # self.editor_container.activate()
         self.original_pixmap = QPixmap(self.canvas_controller.scene_image)
         self.scale_pixmap()
         self.scene = QGraphicsScene()
@@ -155,8 +153,9 @@ class UI_MainWindow(QMainWindow):
         self.canvas_controller.scene_image_updated.value = False
 
     def add_adjust_widget(self):
-        self.editor_container.addWidget(self.adjust_widget.main_widget)
         self.editor_container.setStretch(0, 1)
+        self.editor_container.addWidget(self.adjust_widget.main_widget)
+        self.adjust_widget.main_widget.show()
         self.canvas_controller.scene_image_updated.value = True
 
     def remove_adjust_widget(self):
@@ -200,10 +199,10 @@ class UI_MainWindow(QMainWindow):
         self.edit_toolbar_widget.main_widget.setParent(None)
 
     def event_clicked_on_adjustment_button(self):
-        self.add_adjust_widget()
         self.remove_crop_rubberband()
         self.remove_filter_widget()
         self.editor_container.setStretch(0, 1)
+        self.add_adjust_widget()
         self.canvas_controller.scene_image_updated.value = True
 
     def event_clicked_on_cancel_button(self):
@@ -229,8 +228,9 @@ class UI_MainWindow(QMainWindow):
         self.canvas_controller.scene_image_updated.value = True
 
     def add_filter_widget(self):
-        self.editor_container.addWidget(self.filter_widget.main_widget)
         self.editor_container.setStretch(0, 1)
+        self.editor_container.addWidget(self.filter_widget.main_widget)
+        self.filter_widget.main_widget.show()
 
     def remove_filter_widget(self):
         self.editor_container.removeWidget(self.filter_widget.main_widget)
