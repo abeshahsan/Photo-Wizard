@@ -55,12 +55,13 @@ class CropRubberBandWidget(QWidget):
             self.mouse_event_previous_pos = QCursor.pos()
 
     def update_crop_dimensions(self):
-        diff = (self.parent().width() - self.canvas_controller.scene_image.width()) // 2
-        print(diff)
-        self.left = self.pos().x() - diff
-        self.right = self.pos().x() + self.width() - diff
-        self.top = self.pos().y()
-        self.bottom = self.pos().y() + self.height()
+        diff_x = (self.parent().width() - self.canvas_controller.scene_image.width()) // 2
+        diff_y = (self.parent().height() - self.canvas_controller.scene_image.height()) // 2
+        print(diff_x)
+        self.left = self.pos().x() - diff_x
+        self.right = self.pos().x() + self.width() - diff_x
+        self.top = self.pos().y() - diff_y
+        self.bottom = self.pos().y() + self.height() - diff_y
 
     def get_crop_dimensions(self):
         """
