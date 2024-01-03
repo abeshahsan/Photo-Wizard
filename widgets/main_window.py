@@ -185,8 +185,10 @@ class UI_MainWindow(QMainWindow):
 
     def add_crop_rubberband(self):
         self.crop_rubber_band = CropRubberBandWidget(self.canvas, self.canvas_controller)
-        self.crop_rubber_band.setGeometry(self.canvas.pos().x(), self.canvas.pos().y(), self.scene_pixmap.width(),
-                                          self.scene_pixmap.height())
+        self.crop_rubber_band.setGeometry((self.canvas.width() - self.canvas_controller.scene_image.width()) // 2, 
+                                          (self.canvas.height() - self.canvas_controller.scene_image.height()) // 2,
+                                            self.scene_pixmap.width(),
+                                            self.scene_pixmap.height())
         self.crop_rubber_band.show()
 
     def remove_crop_rubberband(self):

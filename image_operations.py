@@ -106,7 +106,7 @@ def rotate(q_image):
         print(e)
     return new_image.copy()
 
-def blur(q_image):
+def blur(q_image, radius=5):
     """
     Blurs an image (PyQT6 QImage object) and returns a copy of the blurred image. Does not affect the original.\n
     It converts it into a numpy array and performs some blurring operations.
@@ -118,7 +118,6 @@ def blur(q_image):
     height, width, _ = numpy_array.shape
     new_image = np.zeros_like(numpy_array, dtype=np.float32)
 
-    radius = 5
     sigma = max(radius / 2.0, 1.0)
     kernel_width = int(2 * radius) + 1
 

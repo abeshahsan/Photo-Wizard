@@ -48,13 +48,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="QPushButton" name="rotate_button">
-        <property name="text">
-         <string>Rotate</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>

@@ -33,8 +33,11 @@ class UI_AdjustWidget(QWidget):
         self.exposure_slider.valueChanged.connect(self.other_effects)
 
     def blur(self):
-        self.canvas_controller.scene_image = image_operations.blur(self.canvas_controller.original_image)
-        self.canvas_controller.scene_image_updated.value = True
+        if self.blur_slider.value() < 3:
+                self.canvas_controller.scene_image = image_operations.blur(self.canvas_controller.original_image, 0)
+        else:
+                self.canvas_controller.scene_image = image_operations.blur(self.canvas_controller.original_image, self.blur_slider.value())
+                self.canvas_controller.scene_image_updated.value = True
 
     def sharpen(self):
         self.canvas_controller.scene_image = image_operations.sharpen(self.canvas_controller.original_image)

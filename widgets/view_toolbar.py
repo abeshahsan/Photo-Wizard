@@ -12,10 +12,8 @@ class UI_ViewToolbarWidget(QWidget):
 
         self.main_widget = self.findChild(QWidget, "main_widget")
         self.edit_button = self.findChild(QPushButton, "edit_button")
-        self.rotate_button = self.findChild(QPushButton, "rotate_button")
 
-        self.edit_button.setFixedWidth(50)
-        self.rotate_button.setFixedWidth(50)
+        self.edit_button.setFixedWidth(100)
 
 
 if __name__ == "__main__":
