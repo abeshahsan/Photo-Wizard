@@ -42,23 +42,23 @@ class UI_AdjustWidget(QWidget):
 
     def other_effects(self):
         contrast_factor = ((self.contrast_slider.value() - self.contrast_slider.minimum()) / (
-                self.contrast_slider.maximum() - self.contrast_slider.minimum())) * 1.2 + 1.0
+                self.contrast_slider.maximum() - self.contrast_slider.minimum())) * 0.8 + 0.6
         self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.original_image,
                                                                               contrast_factor)
         brightness_factor = ((self.brightness_slider.value() - self.brightness_slider.minimum()) / (
-                self.brightness_slider.maximum() - self.brightness_slider.minimum())) * 20.0 + 0.0
+                self.brightness_slider.maximum() - self.brightness_slider.minimum())) * 200.0 - 100
         self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.scene_image,
                                                                                 brightness_factor)
         warmth_factor = ((self.warmth_slider.value() - self.warmth_slider.minimum()) / (
-                self.warmth_slider.maximum() - self.warmth_slider.minimum())) * 0.2 + 1.0
+                self.warmth_slider.maximum() - self.warmth_slider.minimum())) * 0.8 + 0.6
         self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.scene_image,
                                                                             warmth_factor)
         saturation_factor = ((self.saturation_slider.value() - self.saturation_slider.minimum()) / (
-                self.saturation_slider.maximum() - self.saturation_slider.minimum())) * 0.4 + 1.0
+                self.saturation_slider.maximum() - self.saturation_slider.minimum())) * 1 + 0.5
         self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.scene_image,
                                                                                 saturation_factor)
         exposure_factor = ((self.exposure_slider.value() - self.exposure_slider.minimum()) / (
-                self.exposure_slider.maximum() - self.exposure_slider.minimum())) * 0.8 + 1.0
+                self.exposure_slider.maximum() - self.exposure_slider.minimum())) * 0.8 + 0.6
         self.canvas_controller.scene_image = image_operations.change_exposure(self.canvas_controller.scene_image,
                                                                               exposure_factor)
         self.canvas_controller.scene_image_updated.value = True

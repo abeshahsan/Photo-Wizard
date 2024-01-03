@@ -144,7 +144,6 @@ class UI_MainWindow(QMainWindow):
     def update_canvas(self):
         if not self.canvas_controller.scene_image_updated:
             return
-        print(self.canvas.size())
         self.original_pixmap = QPixmap(self.canvas_controller.scene_image)
         self.scale_pixmap()
         self.scene = QGraphicsScene()
