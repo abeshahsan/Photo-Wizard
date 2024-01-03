@@ -60,6 +60,22 @@ def crop(q_image, top, bottom, right, left):
     return new_image.copy()  # change the statement
 
 
+def mirror(q_image):
+    """
+    Mirrors an image (PyQT6 QImage object) and returns a copy of the mirrored image. Does not affect the original.\n
+    It converts it into a numpy array and performs mirror operation.
+    :param q_image: QImage object
+    :return: a copy of the blurred image
+    """
+    numpy_array = q_image_to_numpy(q_image)
+    new_image = np.fliplr(numpy_array)
+    new_image = np.clip(new_image, 0, 255)
+    new_image = new_image.astype(np.uint8)
+    new_image = numpy_to_q_image(new_image)
+    return new_image.copy()
+
+
+
 def blur(q_image):
     """
     Blurs an image (PyQT6 QImage object) and returns a copy of the blurred image. Does not affect the original.\n

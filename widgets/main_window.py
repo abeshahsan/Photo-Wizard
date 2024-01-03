@@ -59,6 +59,7 @@ class UI_MainWindow(QMainWindow):
         self.edit_toolbar_widget.crop_button.clicked.connect(self.event_clicked_on_crop_button)
         self.edit_toolbar_widget.save_button.clicked.connect(self.save_button_clicked_on_edit_toolbar)
         self.edit_toolbar_widget.filter_button.clicked.connect(self.event_clicked_on_filter_button)
+        self.edit_toolbar_widget.mirror_button.clicked.connect(self.event_clicked_on_mirror_button)
         # self.cancel_button.clicked.connect(self.load_adjust_widget)
 
 
@@ -240,6 +241,11 @@ class UI_MainWindow(QMainWindow):
         self.remove_adjust_widget()
         self.add_filter_widget()
         self.canvas_controller.scene_image_updated.value = True
+
+    def event_clicked_on_mirror_button(self):
+        self.canvas_controller.scene_image = image_operations.mirror(self.canvas_controller.scene_image)
+        self.canvas_controller.scene_image_updated.value = True
+
 
 
 if __name__ == "__main__":
