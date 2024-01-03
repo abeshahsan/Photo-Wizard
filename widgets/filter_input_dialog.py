@@ -12,8 +12,8 @@ from PyQt6.QtWidgets import *
 
 
 class UI_FilterInputDialog(QDialog):
-    def __init__(self):
-        super(UI_FilterInputDialog, self).__init__()
+    def __init__(self, parent=None):
+        super(UI_FilterInputDialog, self).__init__(parent)
         uic.loadUi(Filepaths.FILTER_INPUT_DIALOG(), self)
 
         self.main_widget = self.findChild(QWidget, "main_widget")
