@@ -18,6 +18,7 @@ class UI_FilterInputDialog(QDialog):
 
         self.main_widget = self.findChild(QWidget, "main_widget")
         self.save_button = self.findChild(QWidget, "save_button")
+        self.error_label = self.findChild(QLabel, "error_label")
 
         """Get values from the Dialog"""
 

@@ -22,6 +22,8 @@ class UI_FilterWidget(QWidget):
 
         self.main_widget = self.findChild(QWidget, "main_widget")
         self.filter_area = self.findChild(QScrollArea, "scrollArea")
+        self.add_new_filter_button = self.findChild(QPushButton, "add_new_filter_button")
+        self.add_new_filter_button.clicked.connect(self.open_filter_input_dialog)
         self.read_filters(Filepaths.FILTER_FILE())
         self.canvas_controller = canvas_controller
 
@@ -62,23 +64,17 @@ class UI_FilterWidget(QWidget):
         with open(file_path, 'r') as json_file:
             self.filters = json.load(json_file)
 
-    def add_filter_buttons(self):
-        for filer_name in self.filters.keys():
-            button = QPushButton(filer_name)
-            button.setObjectName(filer_name)
-            button.setFixedWidth(120)
-            button.setFixedHeight(50)
-            button.clicked.connect(self.event_clicked_on_vintage)
-            self.filter_area.widget().layout().addWidget(button)
-
-        button = QPushButton("Add New Filter")
+    def add_filter_button(self, filter_name):
+        button = QPushButton(filter_name)
+        button.setObjectName(filter_name)
         button.setFixedWidth(120)
         button.setFixedHeight(50)
-        button.clicked.connect(self.open_filter_input_dialog)
-        self.filter_area.widget().layout().addWidget(button)
-
-        verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
-        self.filter_area.widget().layout().addItem(verticalSpacer)
+        button.clicked.connect(self.event_clicked_on_vintage)
+        self.filter_area.widget().layout().insertWidget(len(self.filter_area.widget().layout()) - 2, button)
+    
+    def add_filter_buttons(self):
+        for filter_name in self.filters.keys():
+            self.add_filter_button(filter_name)
 
     def open_filter_input_dialog(self):
         self.filter_input_dialog = UI_FilterInputDialog()
@@ -86,14 +82,46 @@ class UI_FilterWidget(QWidget):
         self.filter_input_dialog.show()
 
     def event_click_save_button(self):
+        
+        saturation_value = 1.0
+        contrast_value = 1.0
+        brightness_value = 0.0
+        exposure_value = 1.0
+        warmth_value = 1.0
+        
+        try:    
+            saturation_value = float(self.filter_input_dialog.saturation.text())
+            if saturation_value < 0.6 or saturation_value > 1.4:
+                raise Exception("Invalid saturation value")
+            contrast_value = float(self.filter_input_dialog.contrast.text())
+            if contrast_value < 0.6 or contrast_value > 1.4:
+                raise Exception("Invalid contrast value")
+            brightness_value = float(self.filter_input_dialog.brightness.text())
+            if brightness_value < -100 or brightness_value > 100:
+                raise Exception("Invalid brightness value")
+            exposure_value = float(self.filter_input_dialog.exposure.text())
+            if exposure_value < 0.6 or exposure_value > 1.4:
+                raise Exception("Invalid exposure value")
+            warmth_value = float(self.filter_input_dialog.warmth.text())
+            if warmth_value < 0.6 or warmth_value > 1.4:
+                raise Exception("Invalid warmth value")
+        
+        except Exception as e:
+            print("error processing input dialog message " + str(e))
+            self.filter_input_dialog.error_label.setText("Ivalid input")
+            return
+        
         self.filters[self.filter_input_dialog.filter_name.text()] = {
-            "Saturation": float(self.filter_input_dialog.saturation.text()),
-            "Contrast": float(self.filter_input_dialog.contrast.text()),
-            "Brightness": float(self.filter_input_dialog.brightness.text()),
-            "Exposure": float(self.filter_input_dialog.exposure.text()),
-            "Warmth": float(self.filter_input_dialog.warmth.text())
+            "Saturation": saturation_value,
+            "Contrast": contrast_value,
+            "Brightness": brightness_value,
+            "Exposure": exposure_value,
+            "Warmth": warmth_value
         }
-        print(self.filters)
+        
+        self.add_filter_button(self.filter_input_dialog.filter_name.text())
+        
+        self.write_filters(Filepaths.FILTER_FILE())
 
         self.filter_input_dialog.close()
 
