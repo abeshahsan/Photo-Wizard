@@ -19,7 +19,7 @@
    </property>
    <item row="0" column="0">
     <widget class="QWidget" name="main_widget" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0">
       <property name="spacing">
        <number>3</number>
       </property>
@@ -37,42 +37,23 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="crop_button">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+       <widget class="QPushButton" name="mirror_lr_button">
         <property name="text">
-         <string>Crop</string>
+         <string>Mirror Left-Right</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="adjustment_button">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+       <widget class="QPushButton" name="mirror_ud_button">
         <property name="text">
-         <string>Adjustment</string>
+         <string>Mirror Up-Down</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="filter_button">
+       <widget class="QPushButton" name="rotate_button">
         <property name="text">
-         <string>Filter</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="doodle_button">
-        <property name="text">
-         <string>Doodle</string>
+         <string>Rotate </string>
         </property>
        </widget>
       </item>
