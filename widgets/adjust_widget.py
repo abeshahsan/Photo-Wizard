@@ -45,10 +45,22 @@ class UI_AdjustWidget(QWidget):
                 self.contrast_slider.maximum() - self.contrast_slider.minimum())) * 0.8 + 0.6
         self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.original_image,
                                                                               contrast_factor)
-        brightness_factor = ((self.brightness_slider.value() - self.brightness_slider.minimum()) / (
-                self.brightness_slider.maximum() - self.brightness_slider.minimum())) * 200.0 - 100
-        self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.scene_image,
+        
+        print(self.brightness_slider.value())
+        
+        if self.brightness_slider.value() >= 0:
+                brightness_factor = ((self.brightness_slider.value()) / (
+                        self.brightness_slider.maximum())) * 100.0
+                self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.scene_image,
                                                                                 brightness_factor)
+        else:
+                brightness_factor = ((self.brightness_slider.value() - self.brightness_slider.minimum()) / (
+                        -0.0001 - self.brightness_slider.minimum())) * 0.7 + 0.3
+                self.canvas_controller.scene_image = image_operations.change_brightness_rev(self.canvas_controller.scene_image,
+                                                                                        brightness_factor)
+                
+        
+        
         warmth_factor = ((self.warmth_slider.value() - self.warmth_slider.minimum()) / (
                 self.warmth_slider.maximum() - self.warmth_slider.minimum())) * 0.8 + 0.6
         self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.scene_image,
