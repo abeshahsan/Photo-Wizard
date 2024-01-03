@@ -47,5 +47,26 @@
         "Brightness": -20.0,
         "Exposure": 0.6,
         "Warmth": 1.4
+    },
+    "Anika": {
+        "Saturation": 0.6,
+        "Contrast": 0.9,
+        "Brightness": 0.0,
+        "Exposure": 1.0,
+        "Warmth": 1.0
+    },
+    "Fry": {
+        "Saturation": 1.0,
+        "Contrast": 0.6,
+        "Brightness": 100.0,
+        "Exposure": 0.6,
+        "Warmth": 0.6
+    },
+    "Phoenix": {
+        "Saturation": 1.2,
+        "Contrast": 1.2,
+        "Brightness": 0.0,
+        "Exposure": 1.2,
+        "Warmth": 1.2
     }
 }

@@ -19,6 +19,7 @@ class UI_MainWindow(QMainWindow):
         super().__init__()
         uic.loadUi(Filepaths.MAIN_WINDOW(), self)
         self.setWindowTitle('Photo Wizard')
+        self.setFixedSize(1200, 800)
 
         """Loading necessary objects from the loaded ui."""
         # The canvas is to hold the image to be shown on the screen.
@@ -54,7 +55,7 @@ class UI_MainWindow(QMainWindow):
         self.action_open.triggered.connect(self.open_image)
         self.action_save_as.triggered.connect(self.save_new_file)
         self.action_save.triggered.connect(self.save_file)
-        self.canvas_controller.scene_image_updated.valueChanged.connect(self.update_canvas)
+        self.canvas_controller.scene_image_updated.valueChanged.connect(self.event_update_canvas)
         self.view_toolbar_widget.edit_button.clicked.connect(self.event_clicked_on_edit_button)
         self.edit_toolbar_widget.adjustment_button.clicked.connect(self.event_clicked_on_adjustment_button)
         self.edit_toolbar_widget.save_button.clicked.connect(self.save_file)
@@ -99,7 +100,7 @@ class UI_MainWindow(QMainWindow):
         self.canvas_controller.original_image = self.scene_pixmap.toImage().copy()
         self.canvas_controller.scene_image = self.canvas_controller.original_image.copy()
         if self.scene_pixmap is not None and not self.scene_pixmap.isNull():
-            self.update_canvas()
+            self.event_update_canvas()
 
     def enable_all(self):
         self.action_save_as.setEnabled(True)
@@ -138,7 +139,8 @@ class UI_MainWindow(QMainWindow):
         But if it is smaller or equal, keep it as it is.
         :return:
         """
-        if self.original_pixmap.width() >= self.canvas.width() or self.original_pixmap.height() >= self.canvas.height():
+        if self.canvas_controller.scene_image.width() >= self.canvas.width() or \
+            self.canvas_controller.scene_image.height() >= self.canvas.height():
             self.canvas_controller.scene_image = self.canvas_controller.scene_image.scaled(
                 int(self.canvas.width() * .99),
                 int(self.canvas.height() * .99),
@@ -149,9 +151,12 @@ class UI_MainWindow(QMainWindow):
         else:
             self.scene_pixmap = self.original_pixmap.copy()
 
-    def update_canvas(self):
+    def event_update_canvas(self):
         if not self.canvas_controller.scene_image_updated:
             return
+        self.update_canvas()
+    
+    def update_canvas(self):
         self.original_pixmap = QPixmap(self.canvas_controller.scene_image)
         self.scale_pixmap()
         self.scene = QGraphicsScene()
@@ -190,13 +195,13 @@ class UI_MainWindow(QMainWindow):
 
     def resizeEvent(self, event):
         if self.original_pixmap:
-            self.canvas_controller.scene_image_updated.value = True
+            self.update_canvas()
 
     def event_clicked_on_edit_button(self):
         # self.add_adjust_widget()
         self.remove_view_toolbar_widget()
         self.add_edit_toolbar_widget()
-        self.canvas_controller.scene_image_updated.value = True
+        self.update_canvas()
 
     def add_edit_toolbar_widget(self):
         self.toolbar.addWidget(self.edit_toolbar_widget.main_widget)
@@ -217,7 +222,7 @@ class UI_MainWindow(QMainWindow):
         self.remove_filter_widget()
         self.editor_container.setStretch(0, 1)
         self.add_adjust_widget()
-        self.canvas_controller.scene_image_updated.value = True
+        self.update_canvas()
 
     def event_clicked_on_cancel_button(self):
         self.remove_adjust_widget()
@@ -229,7 +234,7 @@ class UI_MainWindow(QMainWindow):
         self.canvas.show()
         self.canvas_controller.scene_image = QImage(self.canvas_controller.file_path)
         self.canvas_controller.original_image = self.canvas_controller.scene_image
-        self.canvas_controller.scene_image_updated.value = True
+        self.update_canvas()
 
     def event_clicked_on_crop_button(self):
         self.remove_adjust_widget()
@@ -237,7 +242,7 @@ class UI_MainWindow(QMainWindow):
         self.remove_edit_toolbar_widget()
         self.add_crop_rubberband()
         self.add_crop_toolbar_widget()
-        self.canvas_controller.scene_image_updated.value = True
+        self.update_canvas()
 
     def save_button_clicked_on_crop_toolbar(self):
         top, bottom, right, left = self.crop_rubber_band.get_crop_dimensions()
@@ -247,7 +252,7 @@ class UI_MainWindow(QMainWindow):
         self.remove_crop_toolbar_widget()
         self.add_edit_toolbar_widget()
         self.canvas_controller.original_image = self.canvas_controller.scene_image
-        self.canvas_controller.scene_image_updated.value = True
+        self.update_canvas()
 
     def add_filter_widget(self):
         self.editor_container.setStretch(0, 1)
@@ -262,22 +267,22 @@ class UI_MainWindow(QMainWindow):
     def event_clicked_on_filter_button(self):
         self.remove_adjust_widget()
         self.add_filter_widget()
-        self.canvas_controller.scene_image_updated.value = True
+        self.update_canvas()
 
     def event_clicked_on_mirror_lr_button(self):
         self.canvas_controller.scene_image = image_operations.mirror_lr(self.canvas_controller.scene_image)
         self.canvas_controller.original_image = self.canvas_controller.scene_image
-        self.canvas_controller.scene_image_updated.value = True
+        self.update_canvas()
 
     def event_clicked_on_mirror_ud_button(self):
         self.canvas_controller.scene_image = image_operations.mirror_ud(self.canvas_controller.scene_image)
         self.canvas_controller.original_image = self.canvas_controller.scene_image
-        self.canvas_controller.scene_image_updated.value = True
+        self.update_canvas()
 
     def event_clicked_on_rotate_button(self):
         self.canvas_controller.scene_image = image_operations.rotate(self.canvas_controller.scene_image)
         self.canvas_controller.original_image = self.canvas_controller.scene_image
-        self.canvas_controller.scene_image_updated.value = True
+        self.update_canvas()
     
 
     def cancel_clicked_on_crop(self):
@@ -289,8 +294,7 @@ class UI_MainWindow(QMainWindow):
         self.canvas.show()
         self.canvas_controller.scene_image = QImage(self.canvas_controller.file_path)
         self.canvas_controller.original_image = self.canvas_controller.scene_image
-        self.canvas_controller.scene_image_updated.value = True
-
+        self.update_canvas()
 
 
 if __name__ == "__main__":

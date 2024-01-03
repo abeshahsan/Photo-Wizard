@@ -6,7 +6,7 @@
     /*background-color: #931212;*/
 }
 
-QRubberBand {
+.QRubberBand {
     border: 2px solid red;
     background-color: red;
 }
@@ -35,3 +35,4 @@ QRubberBand {
 #error_label {
     color: red;
 }
+
