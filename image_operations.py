@@ -334,7 +334,7 @@ if __name__ == '__main__':
     # Load the image
     image_path = "F:/UNI_STUFF/5th Sem/Photo-Wizard/Kena.png"
     image = QImage(image_path)
-    blurred_image = change_saturation(image, 0.8)
+    blurred_image = change_saturation(image, 1.2)
     pixmap = QPixmap(blurred_image)
 
     # Check if the image was loaded successfully

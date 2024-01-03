@@ -99,6 +99,9 @@
             <property name="pageStep">
              <number>10</number>
             </property>
+            <property name="value">
+             <number>-2000</number>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -122,6 +125,9 @@
             <property name="pageStep">
              <number>10</number>
             </property>
+            <property name="value">
+             <number>-2000</number>
+            </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
@@ -144,6 +150,9 @@
             </property>
             <property name="pageStep">
              <number>10</number>
+            </property>
+            <property name="value">
+             <number>-2000</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -169,7 +178,7 @@
              <number>10</number>
             </property>
             <property name="value">
-             <number>0</number>
+             <number>-2000</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -195,7 +204,7 @@
              <number>10</number>
             </property>
             <property name="value">
-             <number>0</number>
+             <number>-2000</number>
             </property>
             <property name="tracking">
              <bool>true</bool>
@@ -227,7 +236,7 @@
              <number>10</number>
             </property>
             <property name="value">
-             <number>0</number>
+             <number>-2000</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -259,7 +268,7 @@
              <number>10</number>
             </property>
             <property name="value">
-             <number>0</number>
+             <number>-2000</number>
             </property>
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
