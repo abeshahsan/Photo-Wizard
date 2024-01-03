@@ -31,7 +31,7 @@ def numpy_to_q_image(numpy_array):
     height, width, channel = numpy_array.shape
     bytes_per_line = width * channel  # Calculate bytes per line
     # Create QImage from NumPy array data with RGBA channels
-    q_img = QImage(numpy_array.data, width, height, bytes_per_line, QImage.Format.Format_ARGB32)
+    q_img = QImage(numpy_array.tobytes(), width, height, bytes_per_line, QImage.Format.Format_ARGB32)
     return q_img.copy()  # Return a copy to prevent memory issues
 
 
@@ -95,14 +95,15 @@ def rotate(q_image):
     :param q_image: QImage object
     :return: a copy of the blurred image
     """
-    numpy_array = q_image_to_numpy(q_image)
-    print(numpy_array.shape)
-    new_numpy_array = np.rot90(numpy_array, 1, axes =(1,2))
-    print(new_numpy_array.shape)
+    numpy_array = q_image_to_numpy(q_image).astype(np.uint16)
+    new_numpy_array = np.rot90(numpy_array, 1, axes =(0,1))
     new_image = new_numpy_array
     new_image = np.clip(new_image, 0, 255)
     new_image = new_image.astype(np.uint8)
-    new_image = numpy_to_q_image(new_image)
+    try:
+        new_image = numpy_to_q_image(new_image)
+    except Exception as e:
+        print(e)
     return new_image.copy()
 
 def blur(q_image):
