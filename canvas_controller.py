@@ -17,3 +17,4 @@ class CanvasController:
         self.scene_image = QImage()
         self.numpy_array = None
         self.scene_image_updated = ValueProperty(False)
+        self.file_path = None

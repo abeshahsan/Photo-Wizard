@@ -19,7 +19,7 @@
    </property>
    <item row="0" column="0">
     <widget class="QWidget" name="main_widget" native="true">
-     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0,0">
+     <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,0,0,0,0,0,0,0,0,0,0">
       <property name="spacing">
        <number>3</number>
       </property>
@@ -50,9 +50,23 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="mirror_button">
+       <widget class="QPushButton" name="mirror_lr_button">
         <property name="text">
-         <string>Mirror</string>
+         <string>Mirror Left-Right</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="mirror_ud_button">
+        <property name="text">
+         <string>Mirror Up-Down</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="rotate_button">
+        <property name="text">
+         <string>Rotate </string>
         </property>
        </widget>
       </item>

@@ -55,11 +55,14 @@ class UI_MainWindow(QMainWindow):
         self.canvas_controller.scene_image_updated.valueChanged.connect(self.update_canvas)
         self.view_toolbar_widget.edit_button.clicked.connect(self.event_clicked_on_edit_button)
         self.edit_toolbar_widget.adjustment_button.clicked.connect(self.event_clicked_on_adjustment_button)
+        self.edit_toolbar_widget.save_button.clicked.connect(self.save_file)
         self.edit_toolbar_widget.cancel_button.clicked.connect(self.event_clicked_on_cancel_button)
         self.edit_toolbar_widget.crop_button.clicked.connect(self.event_clicked_on_crop_button)
-        self.edit_toolbar_widget.save_button.clicked.connect(self.save_button_clicked_on_edit_toolbar)
+        # self.edit_toolbar_widget.save_button.clicked.connect(self.save_button_clicked_on_edit_toolbar)
         self.edit_toolbar_widget.filter_button.clicked.connect(self.event_clicked_on_filter_button)
-        self.edit_toolbar_widget.mirror_button.clicked.connect(self.event_clicked_on_mirror_button)
+        self.edit_toolbar_widget.mirror_lr_button.clicked.connect(self.event_clicked_on_mirror_lr_button)
+        self.edit_toolbar_widget.mirror_ud_button.clicked.connect(self.event_clicked_on_mirror_ud_button)
+        self.edit_toolbar_widget.rotate_button.clicked.connect(self.event_clicked_on_rotate_button)
         # self.cancel_button.clicked.connect(self.load_adjust_widget)
 
 
@@ -85,6 +88,7 @@ class UI_MainWindow(QMainWindow):
         """
         self.add_view_toolbar_widget()
         image_file_path = self.choose_file()
+        self.canvas_controller.file_path = image_file_path
         self.enable_all()
 
         self.original_pixmap = QPixmap(image_file_path)
@@ -211,7 +215,9 @@ class UI_MainWindow(QMainWindow):
         self.remove_crop_rubberband()
         self.remove_filter_widget()
         self.add_view_toolbar_widget()
-        self.canvas_controller.scene_image = self.canvas_controller.original_image
+        self.canvas.show()
+        self.canvas_controller.scene_image = QImage(self.canvas_controller.file_path)
+        self.canvas_controller.original_image = self.canvas_controller.scene_image
         self.canvas_controller.scene_image_updated.value = True
 
     def event_clicked_on_crop_button(self):
@@ -242,8 +248,19 @@ class UI_MainWindow(QMainWindow):
         self.add_filter_widget()
         self.canvas_controller.scene_image_updated.value = True
 
-    def event_clicked_on_mirror_button(self):
-        self.canvas_controller.scene_image = image_operations.mirror(self.canvas_controller.scene_image)
+    def event_clicked_on_mirror_lr_button(self):
+        self.canvas_controller.scene_image = image_operations.mirror_lr(self.canvas_controller.scene_image)
+        self.canvas_controller.original_image = self.canvas_controller.scene_image
+        self.canvas_controller.scene_image_updated.value = True
+
+    def event_clicked_on_mirror_ud_button(self):
+        self.canvas_controller.scene_image = image_operations.mirror_ud(self.canvas_controller.scene_image)
+        self.canvas_controller.original_image = self.canvas_controller.scene_image
+        self.canvas_controller.scene_image_updated.value = True
+
+    def event_clicked_on_rotate_button(self):
+        self.canvas_controller.scene_image = image_operations.rotate(self.canvas_controller.scene_image)
+        self.canvas_controller.original_image = self.canvas_controller.scene_image
         self.canvas_controller.scene_image_updated.value = True
 
 
