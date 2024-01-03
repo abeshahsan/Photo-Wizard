@@ -137,6 +137,22 @@ def sharpen(q_image):
     new_image = numpy_to_q_image(new_image)
     return new_image.copy()
 
+def change_brightness_rev(q_image, brightness_factor):
+    """
+    Adjusts the exposure of an image (PyQT6 QImage object) and returns a copy of the image.
+    Does not affect the original.
+    It converts it into a numpy array and performs exposure adjustment.
+    :param q_image: QImage object
+    :param exposure_factor: Exposure factor (e.g., 1.5 for 1.5x exposure)
+    :return: a copy of the image with adjusted exposure
+    """
+    numpy_array = q_image_to_numpy(q_image).astype(np.uint16)
+    new_image = 255 * (numpy_array / 255) ** (1/brightness_factor)
+    new_image = np.clip(new_image, 0, 255).astype(np.uint8)
+
+    new_image = numpy_to_q_image(new_image)
+    return new_image.copy()
+
 
 def change_brightness(q_image, brightness_factor):
     """
