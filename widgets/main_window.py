@@ -140,17 +140,21 @@ class UI_MainWindow(QMainWindow):
     def update_canvas(self):
         if not self.canvas_controller.scene_image_updated:
             return
+        print(self.canvas.size())
+        self.canvas.updateGeometry()
+        print(self.canvas.size())
+        # self.editor_container.activate()
         self.original_pixmap = QPixmap(self.canvas_controller.scene_image)
         self.scale_pixmap()
         self.scene = QGraphicsScene()
         self.scene.addPixmap(self.scene_pixmap)
-        pixmap_item = QGraphicsPixmapItem(self.scene_pixmap)
         self.canvas.setScene(self.scene)
         self.canvas_controller.scene_image_updated.value = False
 
     def add_adjust_widget(self):
         self.editor_container.addWidget(self.adjust_widget.main_widget)
         self.editor_container.setStretch(0, 1)
+        self.canvas_controller.scene_image_updated.value = True
 
     def remove_adjust_widget(self):
         self.editor_container.removeWidget(self.adjust_widget.main_widget)

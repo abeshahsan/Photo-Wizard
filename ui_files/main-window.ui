@@ -28,8 +28,8 @@
    </property>
    <property name="minimumSize">
     <size>
-     <width>1059</width>
-     <height>612</height>
+     <width>300</width>
+     <height>250</height>
     </size>
    </property>
    <layout class="QGridLayout" name="gridLayout">
@@ -96,7 +96,7 @@
      <x>0</x>
      <y>0</y>
      <width>1059</width>
-     <height>26</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="defaultUp">

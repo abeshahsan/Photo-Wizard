@@ -74,7 +74,7 @@ class UI_AdjustWidget(QWidget):
         exposure_factor = ((self.exposure_slider.value() - self.exposure_slider.minimum()) / (
                 self.exposure_slider.maximum() - self.exposure_slider.minimum())) * 0.8 + 1.0
         self.canvas_controller.scene_image = image_operations.change_exposure(self.canvas_controller.original_image,
-                                                                              self.exposure_slider.value() / 10.0)
+                                                                              exposure_factor)
         self.canvas_controller.scene_image_updated.value = True
 
 
