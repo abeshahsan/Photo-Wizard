@@ -67,7 +67,7 @@ class UI_AdjustWidget(QWidget):
         saturation_factor = ((self.saturation_slider.value() - self.saturation_slider.minimum()) / (
                 self.saturation_slider.maximum() - self.saturation_slider.minimum())) * 0.4 + 1.0
         self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.original_image,
-                                                                                saturation_factor)
+                                                                                0.8)
         self.canvas_controller.scene_image_updated.value = True
 
     def exposure(self):

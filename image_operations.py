@@ -173,18 +173,18 @@ def change_contrast(q_image, contrast_factor):
     return new_image_qimage.copy()
 
 
-def rgba_to_hsv(rgba_image):
+def rgb_to_hsv(rgb_image):
     """
-    Convert RGBA image to HSV color space.
-    :param rgba_image: RGBA image as a NumPy array
+    Convert RGB image to HSV color space.
+    :param rgb_image: RGB image as a NumPy array
     :return: HSV image as a NumPy array
     """
-    input_shape = rgba_image.shape
-    rgba_image = rgba_image.reshape(-1, 4)
-    red, green, blue, alpha = rgba_image[:, 0], rgba_image[:, 1], rgba_image[:, 2], rgba_image[:, 3]
+    input_shape = rgb_image.shape
+    rgb_image = rgb_image.reshape(-1, 3)
+    r, g, b = rgb_image[:, 0], rgb_image[:, 1], rgb_image[:, 2]
 
-    maxc = np.maximum(np.maximum(red, green), blue)
-    minc = np.minimum(np.minimum(red, green), blue)
+    maxc = np.maximum(np.maximum(r, g), b)
+    minc = np.minimum(np.minimum(r, g), b)
     v = maxc
 
     deltac = maxc - minc
@@ -192,29 +192,29 @@ def rgba_to_hsv(rgba_image):
     s = np.where(maxc != 0, deltac / maxc, 0)  # Avoid division by zero
 
     deltac[deltac == 0] = 1  # to not divide by zero (those results in any way would be overridden in next lines)
-    rc = (maxc - red) / deltac
-    gc = (maxc - green) / deltac
-    bc = (maxc - blue) / deltac
+    rc = (maxc - r) / deltac
+    gc = (maxc - g) / deltac
+    bc = (maxc - b) / deltac
 
     h = 4.0 + gc - rc
-    h[green == maxc] = 2.0 + rc[green == maxc] - bc[green == maxc]
-    h[red == maxc] = bc[red == maxc] - gc[red == maxc]
+    h[g == maxc] = 2.0 + rc[g == maxc] - bc[g == maxc]
+    h[r == maxc] = bc[r == maxc] - gc[r == maxc]
     h[minc == maxc] = 0.0
 
     h = (h / 6.0) % 1.0
-    res = np.dstack([h, s, v, alpha])
+    res = np.dstack([h, s, v])
     return res.reshape(input_shape)
 
 
-def hsv_to_rgba(hsv_image):
+def hsv_to_rgb(hsv_image):
     """
-    Convert HSV image to RGBA color space.
+    Convert HSV image to RGB color space.
     :param hsv_image: HSV image as a NumPy array
-    :return: RGBA image as a NumPy array
+    :return: RGB image as a NumPy array
     """
     input_shape = hsv_image.shape
-    hsv_image = hsv_image.reshape(-1, 4)
-    h, s, v, alpha = hsv_image[:, 0], hsv_image[:, 1], hsv_image[:, 2], hsv_image[:, 3]
+    hsv_image = hsv_image.reshape(-1, 3)
+    h, s, v = hsv_image[:, 0], hsv_image[:, 1], hsv_image[:, 2]
 
     i = np.int32(h * 6.0)
     f = (h * 6.0) - i
@@ -223,18 +223,17 @@ def hsv_to_rgba(hsv_image):
     t = v * (1.0 - s * (1.0 - f))
     i = i % 6
 
-    rgba = np.zeros_like(hsv_image)
-    v, t, p, q, alpha = v.reshape(-1, 1), t.reshape(-1, 1), p.reshape(-1, 1), q.reshape(-1, 1), alpha.reshape(-1, 1)
+    rgb = np.zeros_like(hsv_image)
+    v, t, p, q = v.reshape(-1, 1), t.reshape(-1, 1), p.reshape(-1, 1), q.reshape(-1, 1)
+    rgb[i == 0] = np.hstack([v, t, p])[i == 0]
+    rgb[i == 1] = np.hstack([q, v, p])[i == 1]
+    rgb[i == 2] = np.hstack([p, v, t])[i == 2]
+    rgb[i == 3] = np.hstack([p, q, v])[i == 3]
+    rgb[i == 4] = np.hstack([t, p, v])[i == 4]
+    rgb[i == 5] = np.hstack([v, p, q])[i == 5]
+    rgb[s == 0.0] = np.hstack([v, v, v])[s == 0.0]
 
-    rgba[i == 0] = np.hstack([v, t, p, alpha])[i == 0]
-    rgba[i == 1] = np.hstack([q, v, p, alpha])[i == 1]
-    rgba[i == 2] = np.hstack([p, v, t, alpha])[i == 2]
-    rgba[i == 3] = np.hstack([p, q, v, alpha])[i == 3]
-    rgba[i == 4] = np.hstack([t, p, v, alpha])[i == 4]
-    rgba[i == 5] = np.hstack([v, p, q, alpha])[i == 5]
-    rgba[s == 0.0] = np.hstack([v, v, v, alpha])[s == 0.0]
-
-    return rgba.reshape(input_shape)
+    return rgb.reshape(input_shape)
 
 
 def change_saturation(argb_image, saturation_factor):
@@ -249,23 +248,23 @@ def change_saturation(argb_image, saturation_factor):
     """
     argb_image = q_image_to_numpy(argb_image)
     input_shape = argb_image.shape
-    alpha, red, green, blue = argb_image[:, :, 0], argb_image[:, :, 1], argb_image[:, :, 2], argb_image[:, :, 3]
+    alpha, red, green, blue = argb_image[:, :, 3], argb_image[:, :, 0], argb_image[:, :, 1], argb_image[:, :, 2]
 
-    # Convert ARGB to RGBA for HSV conversion
-    rgba_image = np.dstack([red, green, blue, alpha])
+    # Convert RGBA to RGB for HSV conversion
+    rgb_image = np.dstack([red, green, blue])
 
     # Convert RGBA to HSV
-    hsv_image = rgba_to_hsv(rgba_image)
+    hsv_image = rgb_to_hsv(rgb_image)
 
     # Apply saturation adjustment
     hsv_image[:, :, 1] = np.clip(hsv_image[:, :, 1] * saturation_factor, 0, 1)
 
     # Convert HSV back to RGBA
-    new_rgba_image = hsv_to_rgba(hsv_image)
+    new_rgba_image = hsv_to_rgb(hsv_image)
 
-    # Stack ARGB channels
+    # Stack RGBA channels
     new_argb_image = np.dstack(
-        [new_rgba_image[:, :, 3], new_rgba_image[:, :, 0], new_rgba_image[:, :, 1], new_rgba_image[:, :, 2]])
+        [new_rgba_image[:, :, 0], new_rgba_image[:, :, 1], new_rgba_image[:, :, 2], alpha])
 
     # Reshape to the original input shape
     new_argb_image = new_argb_image.reshape(input_shape)
@@ -332,9 +331,9 @@ if __name__ == '__main__':
     scene = QGraphicsScene()
 
     # Load the image
-    image_path = "F:/UNI_STUFF/5th Sem/Photo-Wizard/Kena.png"
+    image_path = "F:/PythonProject/Updated2/Kena.png"
     image = QImage(image_path)
-    blurred_image = change_saturation(image, 0.8)
+    blurred_image = change_saturation(image, 1.4)
     pixmap = QPixmap(blurred_image)
 
     # Check if the image was loaded successfully
