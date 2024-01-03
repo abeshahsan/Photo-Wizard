@@ -10,6 +10,7 @@ class Filepaths:
     __FILTER_WIDGET = 'ui_files/filter_widget.ui'
     __FILTER_INPUT_DIALOG = 'ui_files/filter_input_dialog.ui'
     __FILTER_FILE = 'Filters.json'
+    __CROP_TOOLBAR = 'ui_files/crop_toolbar.ui'
 
     @staticmethod
     def MAIN_WINDOW():
@@ -42,6 +43,10 @@ class Filepaths:
     @staticmethod
     def FILTER_INPUT_DIALOG():
         return os.path.abspath(Filepaths.__FILTER_INPUT_DIALOG)
+    
+    @staticmethod
+    def CROP_TOOLBAR():
+        return os.path.abspath(Filepaths.__CROP_TOOLBAR)
 
 
 if __name__ == '__main__':

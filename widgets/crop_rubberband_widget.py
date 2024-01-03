@@ -57,7 +57,6 @@ class CropRubberBandWidget(QWidget):
     def update_crop_dimensions(self):
         diff_x = (self.parent().width() - self.canvas_controller.scene_image.width()) // 2
         diff_y = (self.parent().height() - self.canvas_controller.scene_image.height()) // 2
-        print(diff_x)
         self.left = self.pos().x() - diff_x
         self.right = self.pos().x() + self.width() - diff_x
         self.top = self.pos().y() - diff_y
