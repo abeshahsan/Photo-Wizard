@@ -66,7 +66,7 @@ class UI_MainWindow(QMainWindow):
         self.crop_toolbar_widget.mirror_ud_button.clicked.connect(self.event_clicked_on_mirror_ud_button)
         self.crop_toolbar_widget.rotate_button.clicked.connect(self.event_clicked_on_rotate_button)
         self.crop_toolbar_widget.save_button.clicked.connect(self.save_button_clicked_on_crop_toolbar)
-        self.crop_toolbar_widget.cancel_button.clicked.connect(self.event_clicked_on_cancel_button)
+        self.crop_toolbar_widget.cancel_button.clicked.connect(self.cancel_clicked_on_crop)
 
 
     def choose_file(self):
@@ -245,7 +245,7 @@ class UI_MainWindow(QMainWindow):
                                                                    right, left)
         self.remove_crop_rubberband()        
         self.remove_crop_toolbar_widget()
-        self.add_view_toolbar_widget()
+        self.add_edit_toolbar_widget()
         self.canvas_controller.original_image = self.canvas_controller.scene_image
         self.canvas_controller.scene_image_updated.value = True
 
@@ -276,6 +276,18 @@ class UI_MainWindow(QMainWindow):
 
     def event_clicked_on_rotate_button(self):
         self.canvas_controller.scene_image = image_operations.rotate(self.canvas_controller.scene_image)
+        self.canvas_controller.original_image = self.canvas_controller.scene_image
+        self.canvas_controller.scene_image_updated.value = True
+    
+
+    def cancel_clicked_on_crop(self):
+        self.remove_adjust_widget()
+        self.remove_crop_toolbar_widget()
+        self.remove_crop_rubberband()
+        self.remove_filter_widget()
+        self.add_edit_toolbar_widget()
+        self.canvas.show()
+        self.canvas_controller.scene_image = QImage(self.canvas_controller.file_path)
         self.canvas_controller.original_image = self.canvas_controller.scene_image
         self.canvas_controller.scene_image_updated.value = True
 
