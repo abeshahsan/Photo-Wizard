@@ -64,11 +64,19 @@ class UI_FilterWidget(QWidget):
         for filer_name in self.filters.keys():
             button = QPushButton(filer_name)
             button.setObjectName(filer_name)
+            button.setFixedWidth(120)
+            button.setFixedHeight(50)
             button.clicked.connect(self.event_clicked_on_vintage)
             self.filter_area.widget().layout().addWidget(button)
+
         button = QPushButton("Add New Filter")
+        button.setFixedWidth(120)
+        button.setFixedHeight(50)
         button.clicked.connect(self.open_filter_input_dialog)
         self.filter_area.widget().layout().addWidget(button)
+
+        verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
+        self.filter_area.widget().layout().addItem(verticalSpacer)
 
     def open_filter_input_dialog(self):
         self.filter_input_dialog = UI_FilterInputDialog()
