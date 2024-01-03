@@ -85,7 +85,7 @@ class UI_MainWindow(QMainWindow):
         self.add_view_toolbar_widget()
         image_file_path = self.choose_file()
         self.enable_all()
-        
+
         self.original_pixmap = QPixmap(image_file_path)
         self.scene_pixmap = self.original_pixmap.copy()
         self.canvas_controller.original_image = self.scene_pixmap.toImage().copy()
@@ -131,10 +131,13 @@ class UI_MainWindow(QMainWindow):
         :return:
         """
         if self.original_pixmap.width() >= self.canvas.width() or self.original_pixmap.height() >= self.canvas.height():
-            self.scene_pixmap = self.original_pixmap.scaled(int(self.canvas.width() * .99),
-                                                            int(self.canvas.height() * .99),
-                                                            Qt.AspectRatioMode.KeepAspectRatio,
-                                                            Qt.TransformationMode.SmoothTransformation)
+            self.canvas_controller.scene_image = self.canvas_controller.scene_image.scaled(
+                int(self.canvas.width() * .99),
+                int(self.canvas.height() * .99),
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation)
+            self.scene_pixmap = QPixmap.fromImage(self.canvas_controller.scene_image)
+
         else:
             self.scene_pixmap = self.original_pixmap.copy()
 
@@ -169,7 +172,7 @@ class UI_MainWindow(QMainWindow):
         # self.view_toolbar_widget.main_widget.close()
 
     def add_crop_rubberband(self):
-        self.crop_rubber_band = CropRubberBandWidget(self.canvas)
+        self.crop_rubber_band = CropRubberBandWidget(self.canvas, self.canvas_controller)
         self.crop_rubber_band.setGeometry(self.canvas.pos().x(), self.canvas.pos().y(), self.scene_pixmap.width(),
                                           self.scene_pixmap.height())
         self.crop_rubber_band.show()
@@ -219,7 +222,9 @@ class UI_MainWindow(QMainWindow):
 
     def save_button_clicked_on_edit_toolbar(self):
         top, bottom, right, left = self.crop_rubber_band.get_crop_dimensions()
-        self.canvas_controller.scene_image = image_operations.crop(self.canvas_controller.scene_image, top, bottom, right, left)
+        self.canvas_controller.scene_image = image_operations.crop(self.canvas_controller.scene_image, top, bottom,
+                                                                   right, left)
+        self.remove_crop_rubberband()
         self.canvas_controller.scene_image_updated.value = True
 
     def add_filter_widget(self):

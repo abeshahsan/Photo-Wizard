@@ -2,6 +2,7 @@ from PyQt6 import uic
 from PyQt6.QtWidgets import *
 
 import image_operations
+from canvas_controller import CanvasController
 from filepaths import Filepaths
 
 
@@ -40,35 +41,46 @@ class UI_AdjustWidget(QWidget):
         self.canvas_controller.scene_image_updated.value = True
 
     def contrast(self):
+        contrast_factor = ((self.contrast_slider.value() - self.contrast_slider.minimum()) / (
+                self.contrast_slider.maximum() - self.contrast_slider.minimum())) * 1.2 + 1.0
         self.canvas_controller.scene_image = image_operations.change_contrast(self.canvas_controller.original_image,
-                                                                              self.contrast_slider.value() / 10.0)
+                                                                              contrast_factor)
 
         print(self.contrast_slider.value())
         self.canvas_controller.scene_image_updated.value = True
 
     def brightness(self):
+        brightness_factor = ((self.brightness_slider.value() - self.brightness_slider.minimum()) / (
+                self.brightness_slider.maximum() - self.brightness_slider.minimum())) * 20.0 + 0.0
         self.canvas_controller.scene_image = image_operations.change_brightness(self.canvas_controller.original_image,
-                                                                                self.brightness_slider.value())
+                                                                                brightness_factor)
         self.canvas_controller.scene_image_updated.value = True
 
     def warmth(self):
+        warmth_factor = ((self.warmth_slider.value() - self.warmth_slider.minimum()) / (
+                self.warmth_slider.maximum() - self.warmth_slider.minimum())) * 0.2 + 1.0
         self.canvas_controller.scene_image = image_operations.change_warmth(self.canvas_controller.original_image,
-                                                                            self.warmth_slider.value())
+                                                                            warmth_factor)
         self.canvas_controller.scene_image_updated.value = True
 
     def saturation(self):
+        saturation_factor = ((self.saturation_slider.value() - self.saturation_slider.minimum()) / (
+                self.saturation_slider.maximum() - self.saturation_slider.minimum())) * 0.4 + 1.0
         self.canvas_controller.scene_image = image_operations.change_saturation(self.canvas_controller.original_image,
-                                                                                self.saturation_slider.value() / 10.0)
+                                                                                saturation_factor)
         self.canvas_controller.scene_image_updated.value = True
 
     def exposure(self):
+        exposure_factor = ((self.exposure_slider.value() - self.exposure_slider.minimum()) / (
+                self.exposure_slider.maximum() - self.exposure_slider.minimum())) * 0.8 + 1.0
         self.canvas_controller.scene_image = image_operations.change_exposure(self.canvas_controller.original_image,
-                                                                              self.exposure_slider.value() / 10.0)
+                                                                              exposure_factor)
         self.canvas_controller.scene_image_updated.value = True
 
 
 if __name__ == "__main__":
+    canvas_controller = CanvasController()
     app = QApplication([])
-    widget = UI_AdjustWidget()
+    widget = UI_AdjustWidget(canvas_controller)
     widget.show()
     app.exec()

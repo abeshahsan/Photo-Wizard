@@ -88,10 +88,10 @@ class UI_FilterWidget(QWidget):
     def event_click_save_button(self):
         self.filters[self.filter_input_dialog.filter_name.text()] = {
             "Saturation": float(self.filter_input_dialog.saturation.text()),
-            "Brightness": float(self.filter_input_dialog.brightness.text()),
             "Contrast": float(self.filter_input_dialog.contrast.text()),
-            "Warmth": float(self.filter_input_dialog.warmth.text()),
-            "Exposure": float(self.filter_input_dialog.exposure.text())
+            "Brightness": float(self.filter_input_dialog.brightness.text()),
+            "Exposure": float(self.filter_input_dialog.exposure.text()),
+            "Warmth": float(self.filter_input_dialog.warmth.text())
         }
         print(self.filters)
 

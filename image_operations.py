@@ -48,9 +48,16 @@ def crop(q_image, top, bottom, right, left):
     :param left: the starting column of the numpy array to crop
     :return: a copy of the cropped image
     """
+    print(q_image.size())
+    numpy_array = q_image_to_numpy(q_image).astype(np.uint8)
+    new_image = numpy_array[top:bottom, left:right]
+
+    new_image = new_image.astype(np.uint8)
+    new_image = numpy_to_q_image(new_image)
+
     # crop the image and return a NEW image.
     # don't change the provided one
-    return QImage()  # change the statement
+    return new_image.copy()  # change the statement
 
 
 def blur(q_image):
@@ -230,7 +237,6 @@ def hsv_to_rgba(hsv_image):
     return rgba.reshape(input_shape)
 
 
-
 def change_saturation(argb_image, saturation_factor):
     """
     Changes the saturation of an image (PyQT6 QImage object) and returns a copy of the image.
@@ -245,7 +251,6 @@ def change_saturation(argb_image, saturation_factor):
     input_shape = argb_image.shape
     alpha, red, green, blue = argb_image[:, :, 0], argb_image[:, :, 1], argb_image[:, :, 2], argb_image[:, :, 3]
 
-
     # Convert ARGB to RGBA for HSV conversion
     rgba_image = np.dstack([red, green, blue, alpha])
 
@@ -259,7 +264,8 @@ def change_saturation(argb_image, saturation_factor):
     new_rgba_image = hsv_to_rgba(hsv_image)
 
     # Stack ARGB channels
-    new_argb_image = np.dstack([new_rgba_image[:, :, 3], new_rgba_image[:, :, 0], new_rgba_image[:, :, 1], new_rgba_image[:, :, 2]])
+    new_argb_image = np.dstack(
+        [new_rgba_image[:, :, 3], new_rgba_image[:, :, 0], new_rgba_image[:, :, 1], new_rgba_image[:, :, 2]])
 
     # Reshape to the original input shape
     new_argb_image = new_argb_image.reshape(input_shape)
@@ -270,6 +276,7 @@ def change_saturation(argb_image, saturation_factor):
     new_qimage = numpy_to_q_image(new_argb_image)
 
     return new_qimage.copy()
+
 
 def change_exposure(q_image, exposure_factor):
     """
