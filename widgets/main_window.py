@@ -84,7 +84,7 @@ class UI_MainWindow(QMainWindow):
         self.add_view_toolbar_widget()
         image_file_path = self.choose_file()
         self.enable_all()
-        
+
         self.original_pixmap = QPixmap(image_file_path)
         self.scene_pixmap = self.original_pixmap.copy()
         self.canvas_controller.original_image = self.scene_pixmap.toImage().copy()
@@ -216,7 +216,8 @@ class UI_MainWindow(QMainWindow):
 
     def save_button_clicked_on_edit_toolbar(self):
         top, bottom, right, left = self.crop_rubber_band.get_crop_dimensions()
-        self.canvas_controller.scene_image = image_operations.crop(self.canvas_controller.scene_image, top, bottom, right, left)
+        self.canvas_controller.scene_image = image_operations.crop(self.canvas_controller.scene_image, top, bottom,
+                                                                   right, left)
         self.canvas_controller.scene_image_updated.value = True
 
     def add_filter_widget(self):

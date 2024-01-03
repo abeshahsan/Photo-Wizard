@@ -230,7 +230,6 @@ def hsv_to_rgba(hsv_image):
     return rgba.reshape(input_shape)
 
 
-
 def change_saturation(argb_image, saturation_factor):
     """
     Changes the saturation of an image (PyQT6 QImage object) and returns a copy of the image.
@@ -245,7 +244,6 @@ def change_saturation(argb_image, saturation_factor):
     input_shape = argb_image.shape
     alpha, red, green, blue = argb_image[:, :, 0], argb_image[:, :, 1], argb_image[:, :, 2], argb_image[:, :, 3]
 
-
     # Convert ARGB to RGBA for HSV conversion
     rgba_image = np.dstack([red, green, blue, alpha])
 
@@ -259,7 +257,8 @@ def change_saturation(argb_image, saturation_factor):
     new_rgba_image = hsv_to_rgba(hsv_image)
 
     # Stack ARGB channels
-    new_argb_image = np.dstack([new_rgba_image[:, :, 3], new_rgba_image[:, :, 0], new_rgba_image[:, :, 1], new_rgba_image[:, :, 2]])
+    new_argb_image = np.dstack(
+        [new_rgba_image[:, :, 3], new_rgba_image[:, :, 0], new_rgba_image[:, :, 1], new_rgba_image[:, :, 2]])
 
     # Reshape to the original input shape
     new_argb_image = new_argb_image.reshape(input_shape)
@@ -270,6 +269,7 @@ def change_saturation(argb_image, saturation_factor):
     new_qimage = numpy_to_q_image(new_argb_image)
 
     return new_qimage.copy()
+
 
 def change_exposure(q_image, exposure_factor):
     """
