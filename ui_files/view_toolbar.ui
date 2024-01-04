@@ -31,6 +31,9 @@
    </property>
    <item row="0" column="0">
     <widget class="QWidget" name="main_widget" native="true">
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="spacing">
        <number>0</number>
@@ -42,6 +45,23 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{
+font-family: arial;
+font-size: 13px;
+background: #e5e1fc;
+}
+
+QPushButton:hover {
+    background-color: #d2d0ec; /* Button background color on hover */
+    border: 1px solid #a39ee0; /* Button border color on hover */
+}
+
+QPushButton:pressed {
+    background-color: #b2b0d8; /* Button background color when pressed */
+    border: 1px solid #938fc4; /* Button border color when pressed */
+}</string>
         </property>
         <property name="text">
          <string>Edit</string>

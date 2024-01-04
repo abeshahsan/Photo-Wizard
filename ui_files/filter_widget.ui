@@ -109,6 +109,50 @@
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="styleSheet">
+          <string notr="true">*{
+font-family: arial;
+font-size: 14px;
+}
+
+
+#add_new_filter_button {
+    background-color: #3498db; /* Button background color */
+    color: #ffffff; /* Button text color */
+    padding: 8px 16px; /* Padding around the button text */
+    border: 1px solid #2980b9; /* Button border color and thickness */
+    border-radius: 4px; /* Border radius to make it slightly rounded */
+}
+
+#add_new_filter_button:hover {
+    background-color: #2980b9; /* Button background color on hover */
+    border: 1px solid #3498db; /* Button border color on hover */
+}
+
+#add_new_filter_button:pressed {
+    background-color: #21618c; /* Button background color when pressed */
+    border: 1px solid #1b4f72; /* Button border color when pressed */
+}
+
+QPushButton{
+font-family: arial;
+    background-color: #ded9fb; /* Button background color */
+    color: black; /* Button text color */
+    padding: 8px 16px; /* Padding around the button text */
+    border: 1px solid #c4bbf7; /* Button border color and thickness */
+    border-radius: 4px; /* Border radius to make it slightly rounded */
+}
+
+QPushButton:hover {
+    background-color: #d2d0ec; /* Button background color on hover */
+    border: 1px solid #a39ee0; /* Button border color on hover */
+}
+
+QPushButton:pressed {
+    background-color: #b2b0d8; /* Button background color when pressed */
+    border: 1px solid #938fc4; /* Button border color when pressed */
+}</string>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <property name="spacing">
            <number>10</number>
