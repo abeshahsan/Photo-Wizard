@@ -31,6 +31,13 @@
    </property>
    <item>
     <widget class="QWidget" name="main_widget" native="true">
+     <property name="styleSheet">
+      <string notr="true">QPushButton{
+background: #8f7ff1;
+color: whitesmoke;
+font-size:14px;
+}</string>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
        <number>0</number>
