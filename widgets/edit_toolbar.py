@@ -19,12 +19,12 @@ class UI_EditToolbarWidget(QWidget):
         self.save_button = self.findChild(QPushButton, "save_button")
        
 
-        self.crop_button.setFixedWidth(80)
-        self.adjustment_button.setFixedWidth(80)
-        self.filter_button.setFixedWidth(80)
-        self.doodle_button.setFixedWidth(80)
-        self.cancel_button.setFixedWidth(80)
-        self.save_button.setFixedWidth(80)
+        self.crop_button.setFixedWidth(120)
+        self.adjustment_button.setFixedWidth(120)
+        self.filter_button.setFixedWidth(120)
+        self.doodle_button.setFixedWidth(120)
+        self.cancel_button.setFixedWidth(120)
+        self.save_button.setFixedWidth(120)
 
 
 if __name__ == "__main__":

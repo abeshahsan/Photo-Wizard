@@ -220,8 +220,8 @@ def change_contrast(q_image, contrast_factor):
     Does not affect the original.
     It converts it into a numpy array and performs some contrast operations.
     :param q_image: QImage object
+    :param contrast_factor: within 1.0 to 2.2
     :return: a copy of the image with changed contrast
-    contrast_factor within 1.0 to 2.2
     """
     numpy_array = q_image_to_numpy(q_image).astype(np.float32)  # Convert to float32
 
@@ -304,8 +304,8 @@ def change_saturation(argb_image, saturation_factor):
     It converts it into a numpy array and performs saturation adjustment.
     :param argb_image: ARGB image as a NumPy array
     :param saturation_factor: Saturation factor (e.g., 1.5 for 1.5x saturation)
+    :param saturation_factor: within 1.0-1.4
     :return: a copy of the image with changed saturation
-    saturation_factor within 1.0-1.4
     """
     argb_image = q_image_to_numpy(argb_image)
     input_shape = argb_image.shape
@@ -344,8 +344,8 @@ def change_exposure(q_image, exposure_factor):
     Does not affect the original.\n
     It converts it into a numpy array and performs some exposure operations.
     :param q_image: QImage object
+    :param exposure_factor: within 1.0 to 1.8
     :return: a copy of the image with changed exposure
-    exposure_factor within 1.0 to 1.8
     """
     # increase the exposure of the image and return a NEW image.
     # don't change the passed one
@@ -363,8 +363,8 @@ def change_warmth(q_image, warmth_factor):
     It converts it into a numpy array and performs some warmth operations.
     :param q_image: QImage object
     :param warmth_factor: Warmth factor (e.g., 1.0 for no change)
+    :param warmth_factor: within 1.0-1.2
     :return: a copy of the image with changed warmth
-    warmth_factor within 1.0-1.2
     """
     numpy_array = q_image_to_numpy(q_image).astype(np.float32)
 
