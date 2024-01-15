@@ -17,11 +17,11 @@ class UI_CropToolbarWidget(QWidget):
         self.rotate_button = self.findChild(QPushButton, "rotate_button")
 
        
-        self.cancel_button.setFixedWidth(80)
-        self.save_button.setFixedWidth(80)
-        self.mirror_lr_button.setFixedWidth(80)
-        self.mirror_ud_button.setFixedWidth(80)
-        self.rotate_button.setFixedWidth(80)
+        self.cancel_button.setFixedWidth(120)
+        self.save_button.setFixedWidth(120)
+        self.mirror_lr_button.setFixedWidth(120)
+        self.mirror_ud_button.setFixedWidth(120)
+        self.rotate_button.setFixedWidth(120)
 
 
 if __name__ == "__main__":

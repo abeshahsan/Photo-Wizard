@@ -19,7 +19,7 @@ class UI_MainWindow(QMainWindow):
         super().__init__()
         uic.loadUi(Filepaths.MAIN_WINDOW(), self)
         self.setWindowTitle('Photo Wizard')
-        self.setFixedSize(1200, 800)
+        self.setFixedSize(1200, 700)
 
         """Loading necessary objects from the loaded ui."""
         # The canvas is to hold the image to be shown on the screen.
@@ -94,7 +94,7 @@ class UI_MainWindow(QMainWindow):
         image_file_path = self.choose_file()
         self.canvas_controller.file_path = image_file_path
         self.enable_all()
-
+        self.save_file_path = None
         self.original_pixmap = QPixmap(image_file_path)
         self.scene_pixmap = self.original_pixmap.copy()
         self.canvas_controller.original_image = self.scene_pixmap.toImage().copy()
