@@ -1,6 +1,7 @@
-<h1 align="center"> Photo-Wizard </h1>
+<h1 align="center">Photo-Wizard</h1>
+
 <p align="center">
-PhotoEditor is a desktop application with some basic features of a photo editor 
+Photo-Wizard is a desktop application with some basic features of a photo editor 
 made as the Lab project for <br> <span style="color:green;font-weight:500;font-size:18px"> 
 CSE 4552: Computer Graphics and Multimedia Systems
 </span>
